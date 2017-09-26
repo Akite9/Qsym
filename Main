@@ -1,0 +1,839 @@
+\documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{tikz-cd}
+\usepackage{graphicx}
+\usepackage{mathrsfs}
+\usepackage[colorinlistoftodos]{todonotes}
+
+\title{Transitions Galore}
+
+\author{Alex Kite}
+
+\date{\today}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+
+\theoremstyle{definition}
+\newtheorem{df}[thm]{Definition}
+\newtheorem{eg}[thm]{Example}
+\newtheorem{ex}[thm]{Exercise}
+
+\theoremstyle{remark}
+\newtheorem{rem}[thm]{Remark}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+This article is all about transitions, in one guise or another. These should be thought of as the combined process of degenerating a geometric object until it acquires some class of (not too bad) singularities and then resolving these. Such processes arise in many different contexts throughout geometry and carrying a construction from one type of geometry to another often unlocks new doors.
+
+The plan of attack is to review the local theory of the ordinary double point in Section 2, which will be our main singularity of interest throughout. In section 3, we explain how transitions arise naturally in algebraic and complex geometry and give some examples. Section 4 is concerned with the topology of such transitions while section 5 focuses on the picture in symplectic geometry.
+
+\paragraph*{Notation}
+Throughout we shall use $X$ to denote the starting manifold, which we degenerate to $\bar{X}$. Resolutions will always be $Y$ but where there is ambiguity $Y$ denotes the small resolution and $\hat{X}$ the big resolution. The vanishing cycles for the degeneration will be $L$, whilst the expectional set will be $E$. When we're dealing with small resolutions, the exceptional curves will be $C$. We always identify $T^*S^n$ with $\{(u,v)\in \mathbb{R}^{n+1} \times \mathbb{R}^{n+1}| |u|^2=1, u.v=0\}$.
+
+\section{The Ordinary Double Point}
+
+In this section, we review the local structure of the ordinary double point (ODP) given by $W:=\{f=x_1^2+\hdots + x_{n+1}^2=0\} \subset \mathbb{C}^{n+1}$ whose unique singularity is at the origin. 
+
+Why are we interested in this specific singularity? In some sense, we're not - most of the theory can be extended straightforwardly to other singularities (indeed we'll do examples of the ordinary triple point) - but it is the simplest singularity of interest from the perspective of transitions and illustrates well what happens whilst remaining amenable to computation. 
+
+We should clarify that one can imagine simpler singularities, such as isolated orbifold singularities, but (at least in dimensions 3 and above) these are rigid, so we never see them arising from degenerations.  On the other hand, if we start with a smooth complex manifold $X$ and degenerate it, then generically we expect to get at worst ODP singularities, since generically a singular hypersurface $\{ g=0\} \subset \mathbb{C}^{n+1}$ will have ODPs (c.f. generically functions are Morse) and being singular at $x$ imposes the $n+1$ conditions $g(x)=0$ and $\frac{\partial g}{\partial x_i}(x)=0$ for $i=1, \hdots, n$ (say). Hence being singular somewhere on the hypersurface happens in dimension -1 and generically it has ODPs. 
+
+We can be more precise about the non-generic local situation: the space of singular hypersurfaces has a stratification given by the different types (A,D,E and beyond) and numbers of singularities, with ODPs (i.e $A_1$s) forming an open subset, $A_2$s forming a codimension 1 set and so on. From this point of view, any hypersurface singularity can be perturbed to be an ODP and this characterises them too. 
+
+On the computational side, we'll see, for example in the symplectic world, that we can transition through many weird and wonderful singularities but even in the 'simplest' case of conifold transitions, finding the right setup to carry out the transition, namely collections of disjoint Lagrangian spheres satisfying a 'good relation' is not easy (for example, when we ask for their span to be as big as possible), although smoothly it is. So, once again, despite the singularities being themselves 'simple', dealing with the global geometry can be very complicated.
+
+That's enough motivation for the time being. For later, it will useful to have the following topological description of $W$. Write $x_j=a_j+ib_j$ and $r^2:=|a|^2+|b|^2$. Then we have that $|a|^2=|b|^2=r^2/2$ and $\langle a,b \rangle=0$. For $r=0$, we have only the origin but for $r>0$, we get an $S^{n-1}$-fibre bundle over $S^n$. Such objects are classified by $\pi_{n-1}(\text{Diff}(S^{n-1}))$. In the $n=3$ case (as $\text{Diff}(S^2) \simeq O(3)$ has the homotopy type of a Lie group), this bundle is $S^2\times S^3$ (the link of the singularity) and we can describe a neighbourhood of the ODP as the cone over $S^2 \times S^3$ (hence the name 'conifold' ). The corresponding picture is:
+
+\begin{center}
+\includegraphics[scale=1]{Conifold}
+\end{center}
+
+\begin{rem}
+More generally, we always have that a neighbourhood of an isolated hypersurface singularity is homeomorphic to the cone over its link (which is well-defined as a smooth manifold). 
+\end{rem}
+
+ODPs also have nice smoothings and resolutions which we describe presently. We can smooth the ODP by forming $W_t:=\{ f=t \}$ with its standard K{\"a}hler form, where, for simplicity, we take $t \in \mathbb{R}_{>0}$ as the symplectic structure is independent of $t \in \mathbb{C}^*$. This is symplectomorphic to $(T^*S^n,\omega_{can})$ via:
+\begin{center}
+\begin{tikzcd}
+W_t \arrow{r} & TS^n \arrow{r}{g_{\text{round}}} & T^*S^n \\
+(x_j=a_j+ib_j) \arrow{r} & (a_j/|a|,-|a|b_j) & 
+\end{tikzcd}
+\end{center}
+
+In the following it will be crucial to observe the following: if we let $t \rightarrow 0$, then the $S^n$ zero-section of $T^*S^n$ gets crushed down to the ODP, so we no longer get a global symplectomorphism. However, we do still get a symplectomorphism between the punctured ODP $W \backslash \{0\}$ and $T^*S^n \backslash S^n$, given by the same formula.
+
+Here's another geometric way to think about the smoothing - by fibring it over its last coordinate. So write $W = \{x_1^2+\hdots x_n^2=-y^2 \}$ and think of the smoothing as $W_t=\{x_1^2+\hdots x_n^2=t-y^2 \} \mapsto y \in \mathbb{C}$. Then, for $t\neq 0$, as a fibred $n$-fold $W_t$ has two singular fibres over $\pm \sqrt{t}$. Picking a path in the base between these, over the interior points we get Lagrangian $S^{n-1}$s (by looking to the real slice $\mathbb{R}^n \subset \mathbb{C}^n$) which collapse to points over the endpoints (see Figure \ref{fig:Van}). Hence we have constructed a Lagrangian $S^n \subset W_t$, fibred over the path. As $t \rightarrow 0$, the path shrinks to 0, as does the $S^n$ over it, so this is the vanishing cycle we are looking for.
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{FibredSn} 
+\caption{Vanishing cycle for the ODP given by bringing the endpoints together}
+\label{fig:Van}
+\end{figure}
+
+We can also use this picture to see the monodromy, i.e. the Dehn twist in this Lagrangian. This is given by rotating the path between $\pm \sqrt{t}$ by 180 degrees. Viewing this as a motion, this is a generator for the braid group $B_2$. We can generalise this to see the monodromy associated to an $A_n$-singularity as a (faithful) action of the braid group $B_{n+1}$.
+
+We can resolve the ODP by blowing up once at the origin to get $\hat{W}$- the fact that this is holomorphic (away from the singularity) will allow us to construct a global symplectic form when we look at (global) resolutions later. The blow up has exceptional divisor $E \subset \mathbb{P}^n$, a quadric hypersurface, and so the total space is $\mathcal{O}(-1)|_E$.
+
+Note that for $n\neq3$, the Lefschetz hyperplane theorem implies $H_2(E)=\mathbb{Z}$ but for $n=3$ (the conifold case), $E \cong \mathbb{P}^1 \times \mathbb{P}^1$ and $\mathcal{O}(-1)|_E \cong \mathcal{O}(-1,-1)$. Hence each of the generating $\mathbb{P}^1$s is a $(-1)$-curve so can be smoothly blown-down, resulting in two different spaces $W^{\pm}$. In both cases, the exceptional set is now $C \cong \mathbb{P}^1$, so we have a \textit{small} resolution i.e. the exceptional set has codimension $\geq 2$. Moreover, writing $N_{C\backslash \hat{W}}=N_{C \backslash E} \oplus N_{E \backslash \hat{W}}|_C$, we see that abstractly $W^{\pm}$ can be realised as the total space of $\mathcal{O}_{\mathbb{P}^1}(-1)\oplus \mathcal{O}_{\mathbb{P}^1}(-1) \rightarrow \mathbb{P}^1$, which sits nicely in $\mathbb{C}^4 \times \mathbb{P}^1$ and so $W^{\pm}$ are non-compact K{\"a}hler. Note that the only homologically non-trivial cycle is given by the exceptional $\mathbb{P}^1$. Picking a holomorphic trivialisation of $K_W$ away from the node and pulling it back to the small resolution, we can extend it over the small $\mathbb{P}^1$ by Hartog's theorem, to see, in fact, this is Calabi-Yau. 
+
+We can describe $W^{\pm}$ concretely as follows: writing $f = (x_1+ix_2)(x_1-ix_2)+(x_3+ix_4)(x_3-ix_4)$ exhibits the non-factoriality of the conifold and makes it clear that the rational functions 
+\begin{equation*}
+f_1=\frac{x_1+ix_2}{x_3+ix_4}=-\frac{x_3-ix_4}{x_1-ix_2} \text{ and } f_2=\frac{x_1+ix_2}{x_3-ix_4}=-\frac{x_3+ix_4}{x_1-ix_2}
+\end{equation*}
+ are defined on $W\backslash\{0\}$. Thus we define $W^+ \subset \mathbb{C}^{4}\times \mathbb{P}^1$ as the graph of $f_1$ and $W^-$ as the graph of $f_2$. The exceptional set is then $\mathbb{P}^1$, as claimed, and, by the definition of $f_1$ and $f_2$, we see that $x_4 \mapsto -x_4$ swaps $W^+$ and $W^-$. 
+ 
+In fact, this map is a flop, removing a curve (on which the canonical divisor has degree 0) and replacing it with another such curve, whilst changing the intersection with the surface $\bar{S}$, defined as follows. Let $S:=\{x_1=ix_2,x_3=ix_4\} \subset W$, a smooth complex surface passing through the node at $0 \in W$. Consider the proper transform $\bar{S}$ of $S$ in $W^{\pm}$.
+
+The description in terms of $f_1$ and $f_2$ makes it clear that on $W^-$, $\bar{S}$ is given by $\{(x,[1,0])\in \mathbb{C}^4 \times \mathbb{P}^1 | x \in S\} \cong S$ and that $\bar{S}$ and the exceptional $\mathbb{P}^1$ are complex submanifolds intersecting transversely at one point, so $\bar{S}.\mathbb{P}^1=1$.
+
+On $W^+$, $\bar{S}=\text{Clos}\{(x,[x_1+ix_2,x_3+ix_4])|x \in S\backslash \{0\} \}=\text{Clos}\{(x,[x_1,x_3])|x \in S\backslash \{0\} \} \cong  \text{Clos}\{((x_1,x_3),[x_1,x_3]) \in \mathbb{C}^2 \backslash \{0\} \times \mathbb{P}^1 \} \cong \hat{S}$, the blow-up of $S$ at the origin. So $\mathbb{P}^1 \subset \bar{S}$ and $\bar{S}.\mathbb{P}^1=-1$. This is exactly the behaviour one expects under a flop.
+
+\begin{rem}
+The above way of constructing $W^{\pm}$ amounts to blowing up the non-Cartier divisor $S \subset W$ (and $S':=\{x_1=-ix_2,x_3=-ix_4\} \subset W$).
+\end{rem}
+  
+Finally, note that, under the identification  with $T^*S^3 \subset \mathbb{R}^4 \times \mathbb{R}^4$, the orientation-preserving map $x_4 \mapsto -x_4$ goes to reflection in a hyperplane on the first $\mathbb{R}^4$ factor, hence switches the orientation of the $S^3$ sitting inside it (and vice versa).
+
+\begin{rem} Aside on simultaneous resolution. \\
+We may use this resolution of the 3-fold ODP to explicitly see the simultaneous resolution (i.e fitting together the smoothings for $t \neq 0$ and the resolution of the fibre over $t=0$ into a single family) of the surface ODP $W=\{x_1^2+x_2^2+x_3^2=0\}$.
+
+Start with the smoothing $W_t=\{x_1^2+x_2^2+x_3^2=t\}$ and base change by the double cover $t \mapsto t^2$, to get $W'=\{x_1^2+x_2^2+x_3^2=t^2\}$ (whose total space describes the 3-fold ODP). This admits a small resolution $W^{\pm} \rightarrow W'$ which is an isomorphism on the $t \neq 0$ fibres and which replaces the $t=0$ fibre with its resolution, given by $\mathcal{O}(-1)|_C$ for a conic $C \subset \mathbb{P}^2$ and so is isomorphic to $\mathcal{O}(-2) \cong T^*\mathbb{P}^1$.
+
+Thus $W^{\pm}$ gives the desired simultaneous resolution which implies that the smoothing and resolution of the surface ODP are diffeomorphic. Since we picked the miniversal deformation of $W$ (we'll discuss this in Section 4), it follows that all (local) deformations of $W$ admit simultaneous resolutions.
+
+We can extend this to all $A_n$ surface singularities, given by $\{x_1^2+x_2^2+x_3^{n+1}=0\}$, by a similar trick. Its miniversal deformation is given by $x_1^2+x_2^2+x_3^{n+1}+t_1x_3^{n-1}+ \hdots +t_n=x_1^2+x_2^2+P(x_3;t)=0$. Picking an ordering on the roots of $P$ gives an $S_{n+1}$-cover of the miniversal deformation space with coordinates $(t_1, \hdots t_n)$. Under this, the family becomes $x_1 ^2+x_2^2+\prod_{i=1}^{n+1}(x_3-s_i)=0$. This has a singular fibre precisely when $s_i=s_j$ for some $i\neq j$ and one can again find a simultaneous resolution. In fact, the theory extends to all ADE singularities.
+
+We note that for this to work we really need $W$ to be a surface. We can rephrase what we have been doing as saying that the deformation space of the resolution of an $A_n$ singularity is a finite Galois cover of the deformation space of $A_n$. In dimension 3, for example, the former is identified with only a proper subspace of the latter.  
+
+%In fact, a flat family over a curve $C$ which is smooth over $C\backslash \{p\}$ (for $p \in C$) and with fibre over $p$ a (reduced) singular curve or an $n$-fold (with $n \geq 3$) with isolated hypersurface singularities never admits a simultaneous resolution.
+
+\label{Sim}
+\end{rem}
+
+So we have two possible local models of a transition based on an ODP (see Figure \ref{fig:ODP}). Either we can crush an $S^n$ to an ODP and then blow this up to get an exceptional divisor (and the other direction) or, in the $n=3$ case, we can crush an $S^3$ to an ODP and then make a small resolution, introducing an exceptional $\mathbb{P}^1$ (or the other way round). In this case, the map $\hat{W} \rightarrow W^{\pm}$ is given by blowing-up the $\mathbb{P}^1$.
+
+\begin{figure}
+\begin{center}
+\begin{tikzcd}
+\text{ } & \hat{W} \arrow{d} \arrow{rd}  & \\
+W_t \arrow{r} & W & \arrow{l} W^{\pm}
+\end{tikzcd}
+\caption{Possible transitions through an ODP}
+\label{fig:ODP}
+\end{center}
+\end{figure}
+
+ 
+\begin{rem}
+We can see this torically. Take $v_1=(1,0,0),v_2=(1,1,0),v_3=(1,0,1)$ and $v_4=(1,1,1)$ to define a cone $\sigma$ in $\mathbb{R}^3$ (see Figure \ref{fig:Toric}). Then the associated toric variety $X_{\sigma}$ describes the conifold. Standard toric geometry shows this singularity is not an orbifold singularity. The problem is simply that we simply have too many rays for one cone, so to resolve the conifold, all we need to do is to split the one cone into two. There are two natural ways of doing this, which give the two small resolutions $W^{\pm}$ and each introduces a new \textit{2-dimensional} wall, corresponding to the exceptional \textit{curve} in the small resolution. By quotienting the fan, we can see that this is a $\mathbb{P}^1$. So swapping the wall at the level of combinatorics is the same as flopping the $\mathbb{P}^1$.
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.4]{ToricConifold} 
+\caption{Toric description of the conifold singularity and its small resolutions}
+\label{fig:Toric}
+\end{figure}
+
+\end{rem}
+
+\section{Transitions}
+
+Maybe the easiest place to start with transitions is in the land of complex/algebraic geometry where we already know what it means to smooth and resolve. In fact, a lot of the later sections concern making sense of these terms outside the algebraic setting. 
+
+\subsection{Transitions in Algebraic Geometry}
+
+For now, we focus on understanding what transitions look like in algebraic geometry. Why do we care about such things? Firstly, they allow us to build bridges between the complex moduli spaces of two different Calabi-Yaus $X$ and $Y$. To see this, we view the degeneration of the complex structure as passing to the boundary of the moduli space of $X$ and the resolution stage of the transition replaces these singular Calabi-Yaus with smooth ones $Y$. So we have realised the boundary of the complex structure moduli space of $X$ as (part of) the complex structure moduli space of $Y$. In some cases, such as $3$-folds, $Y$ is topologically distinct but in others, such as K3s, it cannot be so. 
+
+Another way to relate distinct Calabi-Yaus is by flops and, in fact, birational Calabi-Yau 3-folds always differ by some such sequence. One can ask how far we can take this and indeed Reid fantasised that all Calabi-Yau 3-folds were so connected. This was proved to be true for all Calabi-Yau complete intersections in weighted projective spaces and many of the 474 million examples arising from the Kreuzer-Sharke toric classification but still there is no systematic theory.
+
+All of this smells of mirror symmetry too: birational Calabi-Yau 3-folds are derived equivalent and hence give a multiplicity of mirrors. The simultaneous resolution of ADE surface singularities (discussed earlier) shows explicitly Lagrangians in the smoothing becoming, in the limit, complex submanifolds of the resolution (see Figure \ref{fig:SimRes}). Taking the structure sheaf of the latter gives us a correspondence between the twisted Fukaya category of the former and the derived category of the latter and one can even construct the autoequivalences of the derived category (Dehn twists in chains of spherical objects) which are mirror to Dehn twists (see \cite{Th}) by considering their limiting behaviour in the central fibre. 
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.7]{SimRes} 
+\caption{Simultaneous resolution of an ADE surface singularity with a Lagrangian $L$ limiting to a holomorphic curve $C$}
+\label{fig:SimRes}
+\end{figure}
+
+Of particular importance here is the fact that, for Calabi-Yaus, we can interpret the resolution stage as the inverse of degenerating the K{\"a}hler form until it reaches the boundary of the K{\"a}hler cone, where it assigns zero area to certain curves. So the (extremal) transition naturally splits into a complex part and a symplectic part. Note that our transition makes sense purely in the complex world (we'll explore this in Section 3.3) but there we are denied such a 'continuous' picture and think of this instead as a type of surgery. Mirror symmetry should interchange complex and symplectic structure and so naively provide an opposite such (extremal) transition between the mirrors (see \cite{Mo}). Thus, here again, understanding transitions helps us to understand mirror symmetry and vice versa.
+
+Such a proposal is supported by an understanding of the topology of such transitions (see Section 4). Calculations there show conifold transitions on 3-folds respect mirror symmetry in the following sense. Suppose we have a conifold transition in $n$ Lagrangians (with $r$ of them independent) $X \rightarrow Y$ and another such (but with $n-r$ of them independent) $\hat{Y} \rightarrow \hat{X}$ between the mirrors. Mirror symmetry interchanges complex and symplectic structure, so on a Calabi-Yau 3-fold this means $h^{1,1}$ and $h^{2,1}$ get swapped. The claim then is that these are compatible, suggesting the mirror to a conifold transition is another such. 
+
+\begin{rem}
+If we consider more general transitions, then the argument above breaks down very quickly. As a result, we have no right to expect the mirror of a transition through a certain singularity to be of the same form.
+\end{rem}
+
+Actually (unless $n=1$) it's not even right for conifolds: the mirror of a conifold with $n$ nodes is not another such conifold but a $\frac{\mathbb{Z}}{n\mathbb{Z}}$-hyperconifold. These have singularities modelled on the quotient of the conifold by some action of $\frac{\mathbb{Z}}{n\mathbb{Z}}$. We'll see more of this shortly.
+
+\begin{eg}
+Torically, however, there is a nice class of extremal transitions for which the story above fits perfectly. Batyrev showed that a hypersurface in a toric variety defined by a polynomial $f=\Sigma_{m \in M} c_m \chi_m$ (where $M$ is the character lattice of the torus) for generic $c_m$ is Calabi-Yau (possibly with singularities) if the Newton polytope of $f$ is reflexive. Conversely, any such polytope $\mathcal{P}$ defines a Calabi-Yau hypersurface in some toric variety (with character lattice $M$ and divisors given by vertices of the polar polytope $\mathcal{P}^0$), where the defining equation is taken to be of the form $ f_{\mathcal{P}}=\Sigma_{m \in M \cap \mathcal{P}} c_m \chi_m$ on the torus.
+
+We now describe an extremal transition of 3-folds associated to the inclusion of reflexive polytopes $\mathcal{Q} \subset \mathcal{P} \subset \mathbb{R}^4$. This means $f_{\mathcal{Q}}$ is a specialisation of $f_{\mathcal{P}}$ and if we view $f_{\mathcal{Q}}$ in the toric variety associated to $\mathcal{P}$, it will have bad singularities. However these can be completely (simultaneously) resolved by subdividing the fan (whose rays are given by vertices in $\mathcal{P}^0$) through adding in other vertices of $\mathcal{Q}^0$. Note that this makes sense because $\mathcal{Q} \subset \mathcal{P} \Leftrightarrow \mathcal{P}^0 \subset \mathcal{Q}^0$.
+
+Noting $\mathcal{P}$ is reflexive precisely when $\mathcal{P}^0$ is, Batyrev showed that the mirror to $\mathcal{P}$ is $\mathcal{P}^0$. This fits with our claim since we have an extremal transition, in the other direction, associated to $\mathcal{P}^0 \subset \mathcal{Q}^0$. One can also verify, as we did for conifolds above, that the Betti numbers are all compatible with the claim.
+\end{eg}
+
+Now that we have motivated studying transitions, let's see what one looks like in the Calabi-Yau setting.
+
+\begin{eg}
+We'll consider the degeneration of the smooth quintic 3-fold $X$ in $\mathbb{P}^4$ to one with 16 nodes, all of which lie in a fixed $\mathbb{P}^2$ given by $\{x_3=0=x_4\}$. Such a singular quintic cannot contain any of the 21 terms with only $x_0,x_1$ and $x_2$ and so we are left with $126-21=105$ variables to play with. Quotienting by the subgroup of $\text{PGL}_5$ which preserves this $\mathbb{P}^2$ gives a set of codimension 15 in the normal 101-dimensional moduli space of the quintic.
+
+Write the singular quintic $\bar{X}$ as $f(x)=x_3g(x)+x_4h(x)=0$ for two degree four polynomials $g$ and $h$. This $f$ is singular precisely at the 16 intersection points of $g$ and $h$ in $\mathbb{P}^2$ and these singularities are generically nodes.
+
+The fact that we have 16 nodes imposing only 15 conditions on moduli suggests that there should be some dependence amongst the vanishing cycles. Indeed, we can see this again explicitly. Topologically, we know from Section 2 that smoothing $\bar{X}$ to $X$ can be thought of as cutting out a small open ball (a $B^8$) from $\mathbb{P}^4$ near each singular point with boundary on the quintic $S^2 \times S^3$ and gluing in $B^3 \times S^3$. In our $\mathbb{P}^2$, this $B^8$ looks like a $B^4$, whose boundary $S^3$ becomes the vanishing cycle for that node in the smoothing. Thus we get 16 vanishing cycles which are precisely the boundary of the punctured $\mathbb{P}^2$, representing a 4-chain in $X$. Hence, in this case, we can actually see the 'good relation' without much effort. 
+
+Analytically we can always form a small resolution and, in fact, we can do this projectively here by blowing up the non-Cartier divisor $\mathbb{P}^2$ in $\bar{X}$ which passes through all the nodes. This gives a projective crepant resolution $X$ which is therefore Calabi-Yau.
+
+The computations in Section 4 show the effect of the transition on the topology: in the notation there, $n=16, r=15$ and so $b_i(Y)=b_i(X)=0$ for $i=1,5$ and $b_i(Y)=b_i(X)+1=2$ for $i=2,4$ and $b_3(Y)=b_3(X)-30=174$.  
+
+Later we'll take this kind of example in a different direction by using a quintic with 125 nodes to produce a symplectic Calabi-Yau which is not obviously K{\"a}hler (via a \textit{symplectic conifold transition}).
+\label{Eg1}
+\end{eg}
+
+\subsection{Hyperconifolds}
+
+So far when discussing conifold transitions, we have neglected to mention multiply-connected Calabi-Yaus. These naturally arise by quotienting a family of simply-connected Calabi Yau 3-folds by the free action of a finite group. Unlike the even-dimensional case, these quotients remain Calabi-Yau since, by holomorphic Lefschetz, a free action of a finite group on a smooth Calabi-Yau 3-fold leaves the holomorphic volume form invariant. But degenerating such Calabi-Yaus generically gives us \textit{hyperconifold} singularities, since on the covers we expect conifold singularities. Precisely, these are quotients of the conifold by a finite subgroup $G$ of its automorphisms such that $W/G$ has an isolated Gorenstein singularity.
+
+In the cyclic case $G=\frac{\mathbb{Z}}{n\mathbb{Z}}$, these have been classified in \cite{Da} and correspond (excluding one exceptional case), for $0 < k<n$ with $(n,k)=1$, to the action 
+\begin{equation*}
+\zeta: (x_1,x_2,x_3,x_4) \mapsto (\zeta x_1,\zeta^k x_2,\zeta^{-k} x_3, \zeta^{-1} x_4)
+\end{equation*}
+ for $\zeta=e^{2\pi i /n}$, where here we view the conifold as $W=\{ x_1x_4=x_2x_3\}$. For fixed $n$, these are not all distinct, since $k \rightarrow -k$ sends $x_2 \leftrightarrow x_3$ and $k \rightarrow k^{-1}$ sends $x_1 \leftrightarrow -x_2, x_3\leftrightarrow x_4$. However, apart from these moves, the quotients are distinct and we refer to this local model by $\mathcal{C}_{n,k}$.
+
+These pairs $(n,k)$ with $(n,k)=1$ are reminiscent of the Lens spaces $L(n,k)$ and, indeed, the latter are the vanishing cycles (up to homeomorphism) in $W_t/G$. 
+
+We are now in a position to calculate the mirror of a Calabi-Yau 3-fold with $n$ nodes. This is made easier by the fact that $\mathcal{C}_{n,k}$ is toric, with torus $T/\mathbb{Z}_n$ where $T \cong (\mathbb{C}^*)^3 \hookrightarrow W$ is the torus $(t_1,t_2,t_3) \mapsto (\frac{t_1}{t_3},t_2,\frac{t_1}{t_2},t_3)$. From this and the toric description of $W$, we conclude $\mathcal{C}_{n,k}$ is described by the fan with vertices $v_1=(1,0,0),v_2=(1,1,0),v_3=(1,k,n)$ and $v_4=(1,k+1,n)$.
+
+According to local mirror symmetry, the mirror of $\mathcal{C}_{n,k}$ should be given as
+\begin{equation*}
+\{F(u,v,x,y):=uv-f(x,y)=0|u,v \in \mathbb{C},x,y \in \mathbb{C}^*\}
+\end{equation*}
+where $f=1+x+x^ky^n+x^{k+1}y^n$ has Newton polytope given by the intersection of the fan for $\mathcal{C}_{n,k}$ and the hyperplane containing all the primitive generators of the rays (such a hyperplane exists as $\mathcal{C}_{n,k}$ is Calabi-Yau). Once can check $F$ has $n$ distinct ODPs, as required.
+
+We may now define the \emph{hyperconifold transition} of a smooth Calabi-Yau 3-fold $X$ with a degeneration to a factorial (projective) variety $\bar{X}$ (smooth apart from a single $\mathbb{Z}_n$-hyperconifold singularity) by taking a projective, crepant resolution $Y$ of $\bar{X}$. Such a resolution always exists in this setting and means that $Y$ is necessarily Calabi-Yau too. This differs topologically from the conifold case since a hyperconifold transition changes the fundamental group.
+
+We are finally in a position to precisely state that the mirror to a conifold transition of a Calabi-Yau 3-fold in $n$ Lagrangians with 1 relation (in total) is a $\frac{\mathbb{Z}}{n\mathbb{Z}}$-hyperconifold transition. 
+
+It is interesting to contrast the construction of this resolution with what happens for the conifold as a motivation for what happens later.
+
+Like the small resolution of the conifold, a clever choice of triangulation coming from repeated star subdivisions of $\mathcal{C}_{n,k}$ yields a good local model. The question is whether we can glue this into $\bar{X}$ such that the end result is still projective (we can always do so analytically to get an analytic space $\pi: \hat{X} \rightarrow \bar{X}$ which is necessarily an algebraic space, being bimeromorphic to $\bar{X}$). Projectivity is a global question and we can use the relative Nakai-Moishezon criterion here (using that $\bar{X}$ is projective) to reduce it to searching for a divisor $D$ on $\hat{X}$ such that $D^{\text{dim}V}.V>0$ for all integral subspaces $V$ which project (under $\pi$) to a point. Note that any non-trivial such $V$ lies in $E$. 
+
+Here then is the difference between the conifold and hyperconifold settings: for the local construction above of the resolution of $\mathcal{C}_{n,k}$ shows that such a $D$ exists (when we triangulate, we add in new rays over the $n-1$ integral interior points of the fan intersected with the $z=1$ hyperplane) whereas for the local model of the resolution of the conifold, we have no such nice compact divisors and we are forced to work globally. We saw this in Example \ref{Eg1} where we had a very convenient choice of $\mathbb{P}^2 \subset \bar{X}$ to help us out. In general, a projective 3-fold with at worst ODPs admits a projective small resolution precisely when there is a non-Cartier divisor passing through each ODP. Such a divisor must locally be some multiple of $S$ (or $S'$). We'll see in \ref{Sympl2} how this carries across to the purely symplectic setting.
+
+\subsection{Transitions in Complex Geometry}
+
+Let's now look at the complex picture, as explored by \cite{Fr}. Here we start with $Y$, a Calabi-Yau 3-fold with a collection of disjoint smooth rational curves $C_i$ each having normal bundle $\mathcal{O}(-1)\oplus \mathcal{O}(-1)$. We may then contract these to ODPs on a complex 3-fold $\bar{X}$ with $K_{\bar{X}}$ trivial. We now seek to smooth $\bar{X}$.
+
+\begin{thm}
+We have a complex smoothing $X$ iff we have a 'good relation' between the $C_i$ of the form
+\begin{equation*}
+\Sigma_i \lambda_i [C_i]=0 \in H_2(Y) \text{ with all } \lambda_i \neq 0 
+\end{equation*}
+\label{ComSmooth}
+\end{thm}
+
+\begin{rem}
+If we flop the $C_i$ in $Y$, then we still have a 'good relation'.
+\end{rem}
+
+\begin{proof}
+We recall that first-order deformations of a smooth Calabi-Yau 3-fold $X$ with a holomorphic volume form $\Omega$ are governed by $H^{3,0}(X)\oplus H^{2,1}(X)$. These may be thought of as 3-cycles since $H_3(X,\mathbb{R}) \cong H^3(X,\mathbb{R})$ is the real part of $H^3(X,\mathbb{C})$. The content of Friedman and Tian's results in this area is that this way of thinking carries across to the nodal case, where a 3-cycle $D \subset \bar{X}$ smooths a node precisely when $D$ intersects it (by which we mean its lift $\hat{D} \subset Y$ has non-zero intersection with the associated exceptional curve).
+
+So given a 'good relation', we may pick a bounding 3-chain $\hat{D}$ on $Y$ which agrees with an appropriate local model and blows down to give a 3-cycle $\bar{D}$ in $\bar{X}$ through all of the nodes. This then corresponds to a global smoothing $X$ of $\bar{X}$. 
+
+We can see this as a process of inflating the vanishing cycles by lifting $\bar{D}$ to a 3-cycle $D$ on $X$. Using the local model, we may show that $D.L_i=\lambda_i$ where $L_i$ is the vanishing cycle for the $i$th node. Thus $\int_{L_i}\text{PD}[D]\neq 0$ and so the inflation process (viewed as starting from $\epsilon=0$) given by $\Omega+\epsilon\text{PD}[D] \in H^3(X)$ determines the corresponding complex smoothing.
+
+Conversely, given a smoothing $X$ corresponding to a 3-form $\Omega$, we may run the argument backwards to get a good relation with $\lambda_i=\int_{L_i} \Omega \neq 0$.
+\end{proof}
+
+\begin{rem}
+We already know that, for Calabi-Yaus, there is a mirror transition and so in this context, we should have a mirror transition of \textit{symplectic} manifolds. We will explore this extensively later where we shall try to mimic this proof (see \ref{Sympl2}).
+\end{rem}
+
+\begin{eg}
+We can use the above to construct an exotic 'complex Calabi-Yau': specifically, we find a non-K{\"a}hler complex structure on $(S^3 \times S^3)^{\# 25}$ with trivial canonical bundle, following \cite{LT}. Note that $S^3 \times S^3$ does indeed admit a complex structure by viewing it as a $\mathbb{T}^2$-bundle over $\mathbb{P}^1\times \mathbb{P}^1$ via the Hopf map but the canonical bundle is not trivial.
+
+We shall define a Calabi-Yau 3-fold $Y$ containing $15$ disjoint rational curves $l_i$ with normal bundles $\mathcal{O}(-1) \oplus \mathcal{O}(-1)$ such that the $l_i$ satisfy a good relation in homology. By the above, we may then contract these to a nodal Calabi-Yau with 15 ODPs before smoothing to get $X$ with trivial canonical bundle. 
+
+We take $Y$ to be a complete intersection as follows. Define two smooth cubic surfaces in $\mathbb{P}^3$ 
+\begin{equation*}
+ \Gamma_1= \{x_0^3+x_1^3+x_2^3+x_3^3=0\}
+ \text{ and } \Gamma_2= \{y_0^3+y_1^3+y_2^3+y_3^3=0\}
+\end{equation*}
+and the hyperplane $H=\{x_0y_0+x_1y_1+x_2y_2+x_3y_3=0\} \subset \mathbb{P}^3 \times \mathbb{P}^3$. Set $Y=(\Gamma_1\times\Gamma_2) \cap H$, a smooth 3-fold with normal bundle in $\mathbb{P}^3 \times \mathbb{P}^3$ given by $\mathcal{O}(3,0)\oplus \mathcal{O}(0,3) \oplus  \mathcal{O}(1,1)$, hence Calabi-Yau, by adjunction. 
+
+Further computation, via the Lefschetz hyperplane theorem and Chern classes, shows that $Y$ is simply connected and has $h^{1,1}=14, h^{2,0}=0, h^{2,1}=23$ and hence $b_2(Y)=14$, $b_3(Y)=48$.
+
+The 15 curves satisfy one relation in homology ($m=0,l=1$ in the notation of Section 4) and hence the calculations there  allow us to see the effect on the Betti numbers. We find that $X$ is simply connected with $b_2(X)=0,b_3(X)=50$.
+
+Finally, any such $X$ must be diffeomorphic to the connect sum $(S^3 \times S^3)^{\# 25}$. This follows since we can find embedded $S^3$s representing a symplectic basis for $H_3(X)/\text{torsion}$ which intersect as simply as possible given that they are such a basis. This allows us to write $X = X_1 \# (S^3 \times S^3)^{\# h}$ with $H_3(X_1)$ finite. So $b_3(X)=50$ means $h=25$. Furthermore, according to \cite{W}, we have a list of invariants which determine $X_1$ up to diffeomorphism. Once can show $H_3(X)$ is torsion-free so we must have $H_3(X_1)=0$ and $H_2(X_1)=0$, so $X_1$ must be $S^6$ and we conclude that $X \cong (S^3 \times S^3)^{\# 25}$, as we wanted.
+
+\end{eg}
+
+\section{Topology of Transitions}
+
+In this section, we summarise the effect on the Betti numbers of a large class of transitions given by degenerating some $n$-fold until it acquires mild singularities and then resolving it. We shall mainly be interested in the cases $n=2,3$ and particularly in the conifold case. 
+
+%Given that most of the surface singularities which will concern us are going to be Du Val and so simple (this implies their smoothings and resolutions are diffeomorphic), these transitions will not affect the topology and so, for ease of exposition, we restrict to the 3-fold case in this section (in the knowledge that it wouldn't be too hard to adjust if we wanted to compute the effect of a transition in, for example, a non-Du Val singularity).%
+
+More precisely, suppose we start with a smooth $n$-fold $X$ which we then degenerate to a singular $n$-fold $\bar{X}$ with, at worst, isolated hypersurface singularities (IHS). Suppose we also have a resolution $\pi: Y \rightarrow \bar{X}$ with exceptional set $E \subset Y$. Most of what we want will follow from two long exact sequences.
+
+Before we can use these, we must introduce the (closed) Milnor fibre $M_x$ associated to a singularity $x \in \bar{X}$. A neighbourhood of $x$ is analytically isomorphic to $0 \in \{f=0\} \subset \mathbb{C}^{n+1}$ for some analytic function $f$. Then $M_x := \{f=t\} \cap \bar{B}^{2n+2}(\epsilon)$ for some small $t \in \mathbb{C}$, $\epsilon \in \mathbb{R}_{>0}$ such that $t \ll \epsilon$. This is a real $2n$-manifold with boundary the link of the singularity. Note that because we are dealing with IHS, $M_x$ is independent of any choices.
+
+What is the topology of $M_x$? For an IHS locally of the form $\{ f =0\}$, it's simple to describe. Firstly, we know from earlier that the Milnor fibre of an $n$-fold ODP is $T^*S^n$ which is homotopic to $S^n$. Now for a more complicated singularity, notice that $f$ is no longer complex Morse (ODPs are the complex equivalent of the usual real non-degenerate singularities). Consequently, since the result should be independent of the particular smoothing, instead of just smoothing all at once by introducing some parameter $t$ as usual, we first 'Morsify' $f$  (recall Morse functions are dense) before smoothing the result. The effect of such a procedure is to split the complicated singularity into a number of ODPs which we already understand. This allows one to intuit that the vanishing cycles should look like $\vee_{i=1}^{\mu_x} S^n$ where $\mu_x$ is the Milnor number of the singularity at $x$. 
+
+\begin{rem}
+It is useful to have the following algebraic way of calculating $\mu_x$. Let $J:=\langle \frac{\partial f}{\partial x_i}|i=1,\hdots, n+1 \rangle \triangleleft \mathcal{O}_{X,x}$. Then $\mu_x=\text{dim}_{\mathbb{C}} \mathcal{O}_{X,x}/J$.
+\end{rem}
+
+We can make this more precise as follows. An IHS $\{f=0\}$ has a miniversal deformation space (unique up to analytic isomorphism). We don't expect to have a universal deformation so this is the next best option since, in particular, it means this deformation has no trivial one-parameter subfamily. We can explicitly describe it by taking a basis $g_1, \hdots, g_{\tau}$ of $\mathcal{O}_{X,x}/\langle J, f \rangle$, the dimension of which (by definition) is the Tjurina number, $\tau(X,x)$, of the singularity $(X,x)$. Then
+\begin{equation*}
+\textbf{X}:=\{f+\Sigma_{i=1}^{\tau} t_i g_i=0\} \subset \mathbb{C}^{n+1} \times \mathbb{C}^{\tau}
+\end{equation*}
+defines the miniversal deformation $G:\mathbf{X} \rightarrow \mathbb{C}^{\tau}$.
+
+Now consider the discriminant locus $D:=\{\mathbf{t} \in \mathbb{C}^{\tau}| G^{-1}(\mathbf{t}) \text{ is singular} \}$, an irreducible singular hypersurface of multiplicity $\mu_x$ at $x \in \mathbb{C}^{\tau}$. So a generic line $L$ in the base near the origin meets $D$ in $\mu_x$ points whose corresponding fibres have precisely one ODP, giving $\mu_x$ vanishing $S^n$s associated to the singularity at $x$, exactly as we were claiming.
+
+\begin{eg}
+Let's look at this in greater detail for the example of the 3-fold ordinary triple point (OTP) which we shall use later. This is an isolated hypersurface singularity of the form $W:=\{ x_1^3+x_2^3+x_3^3+x_4^3=0\}$. One reason we may be interested in this particular singularity is that it admits a crepant resolution and hence the transition through an OTP will preserve $c_1=0$. 
+
+Explicitly, the blow-up at the origin $\hat{W}$ resolves the OTP by introducing a smooth cubic surface $E=\{x_1^3+x_2^3+x_3^3+x_4^3=0\} \subset \mathbb{P}^3$ as exceptional divisor. Since the normal bundle $N_{E \backslash \hat{W}}=\mathcal{O}(-1)|_E=\mathcal{O}(-4)|_E \otimes \mathcal{O}(3)|_E=K_E$, adjunction tells us that $K_{\hat{W}}|_E \cong \mathcal{O}$, hence $K_{\hat{W}}$ lifts from $W$ and so $c_1$ is 0.
+
+To understand the smoothing of the 3-fold OTP, we start with the simpler smoothing of the 1-fold OTP $\{x_1x_2(x_1+x_2)=0\}$.  According to the procedure above, we don't want to just smooth this to $\{x_1x_2(x_1+x_2)=t\}$ but we should first Morsify by introducing $\epsilon$ and then smooth to end up with $\{ x_1x_2(x_1+x_2+\epsilon) = t\}$. Note that we are not using the \textit{full} miniversal deformation here (which would involve $x_1$ and $x_2$ terms as well) simply because it makes the calculations easier (and suffices). Geometrically, Morsification means perturbing the 3 co-incident lines at the OTP to a triangle of $\mathbb{P}^1$s, intersecting at 3 \textit{ODP}s. Now when we smooth, we get one additional node in the fibre over $t=(\epsilon/3)^3$ and hence 4 vanishing $S^1$s, intersecting as shown in Figure \ref{fig:CurveOTP}, as expected from the dimension of the Milnor algebra. Note that if we included the extra (deformation) parameters, we could further split apart the singularities so that they were all in different fibres.
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{CurveOTP} 
+\caption{Vanishing cycles for the 1-dimensional OTP}
+\label{fig:CurveOTP}
+\end{figure}
+
+Now for the 3-fold case, instead of doing the explicit calculation outlined above, later we'll identify the 3-fold OTP as a fibre product of the above example and this will allow us to complete the smoothing (see \ref{OTPAgain}).
+\label{OTP}
+\end{eg}
+
+Back to the general story, let $S:=\text{Sing}(\bar{X})$ and $M:= \sqcup_{x \in S} M_x$. Then $X/M \cong \bar{X}$ and the long exact sequence of the pair gives:
+
+\begin{equation}
+\hdots \rightarrow H_{*+1}(\bar{X}) \rightarrow H_{*}(M) \rightarrow H_{*}(X) \rightarrow H_{*}(\bar{X}) \rightarrow \hdots
+\label{Mil}
+\end{equation}
+
+Since $Y/E \cong \bar{X}$, we also have the exact sequence:
+\begin{equation}
+\hdots \rightarrow H_{*+1}(\bar{X}) \rightarrow H_{*}(E) \rightarrow H_{*}(Y) \rightarrow H_{*}(\bar{X}) \rightarrow \hdots
+\label{Ler}
+\end{equation}
+
+The crucial claim that allows us to relate these two sequences is the following. For simplicity, we work in the 3-fold case. Suppose we have $H_2(M)=0$ and $H_3(E)=0$ (e.g. IHS with big or small resolutions having reduced exceptional set) so $\eqref{Mil}$ and $\eqref{Ler}$ fit together as:
+\begin{center}
+\begin{tikzcd}
+\text{} &  & 0 \arrow{d} & \\
+& & H_3(Y) \arrow{d} & \\
+H_3(M) \arrow{r}{\phi} & H_3(X) \arrow{r} & H_3(\bar{X}) \arrow{r} \arrow{d}{\psi} & 0 \\ 
+& & H_2(E) & 
+\end{tikzcd}
+\end{center}
+
+\begin{lem}
+Let $r:=\emph{dim}\langle \text{Vanishing cycles}\rangle=\text{rk}(\phi)$. \\
+$l:=\emph{dim}\langle\text{Relations on 2-cycles in exceptional set}\rangle=\text{rk}(\psi)$. \\
+ $m:=\text{Rank of intersection pairing on im}(\phi)$. Then $r=l+m$.
+\end{lem}
+
+Hence we see precisely how vanishing cycles on $X$ give relations on $Y$ and this, along with the earlier exact sequences, often allows us to compute the effect of transitions on the Betti numbers. Such calculations can also be simplified by noting that (\ref{Mil}) and (\ref{Ler}) imply $\chi(Y)=\chi(\bar{X})+\chi(E)=\chi(X)-\chi(M)+\chi(E)$.
+
+%\begin{rem} 
+%Given this lemma, it is important to be able to calculate $m$ and the following trick often comes in handy. Consider the long exact sequence associated to the pair $(M,\partial M)$ with $X$ having only isolated hypersurface singularities:
+%\begin{equation*}
+%0 \rightarrow H_4(M,\partial M) \rightarrow H_3(\partial M) \rightarrow H_3(M) \xrightarrow{\rho} H_3(M,\partial M) \rightarrow \hdots
+%\end{equation*}
+
+%Note that $H_4(M,\partial M) \cong H^2(M) = 0$ and $H_3(M,\partial M) \cong H^3(M)$. Under this, $\rho$ is identified with the intersection pairing map.
+
+%As we have isolated hypersurface singularities $\partial M$ is their link and the general philosophy is that the link (which misses the singularities) still sees what is going on. From this, according to \cite{Gro}, we can see $H_3(\partial M) = \bigoplus_{x \in S}\text{Cl}(\bar{X},x) \otimes \mathbb{C}$ where $\text{Cl}(\bar{X},x)$ is the local class group at $x$. The conclusion is that $m = \Sigma_{x \in S} (\mu_x - \rho(\bar{X},x))$ where $\rho(\bar{X},x)=\text{rk} \text{Cl}(\bar{X},x)$. The upshot is that both quantities here can be calculated in some standard model. 
+%\end{rem}
+
+%\begin{rem} Digression on the local class group.
+%First of all, we should be careful about which local class group - the algebraic $\text{Cl}O_{X,x}$ or the analytic $ClO_{X,x}^an$. Note we have an exact sequence:
+%\begin{equation*}
+%0\rightarrow \text{Pic}(X) \rightarrow \text{Cl}(X) \rightarrow \bigoplus_{x \in S} \text{Cl}(O_{X,x})
+%\end{equation*}
+%so this measures how far divisors are from being locally principle. 
+
+%From now on we'll work with the analytic class group, which we'll call $Cl(X,0)$, associated to the isolated hypersurface singularity $\{f=0\} \subset \mathbb{C}^{n+1}$. We now explain how to calculate the rank $\rho(X)$ of $Cl(X,0)$ in nice situations. 
+
+%By a result in \cite{Fl}, if $0 \in X$ is canonical, we have that the first Chern class map $c_1:\text{Pic(X-0)} \rightarrow H^2(X-0)$ is an isomorphism and the latter can be identified with $H^2(Lk)$ where $Lk$ is the link of the singularity. By \cite{Mi}, the structure of $Lk$ is particularly nice for isolated hypersurface singularities: in particular $H^2(Lk)=0$ if $n\geq 4$, and hence $Cl(X,0)=0$. Moreover for surfaces, these groups are well-understood. So are reduced to the 3-fold case, when $Cl(X,0)$ is a free, finitely-generated abelian group.
+
+%Assume $f$ is quasi-homogeneous i.e. we can find $a_i \in \mathbb{Q}$ for $i=1, \hdots, n+1$ such that for every exponent  $m=(m_1,\hdots,m_{n+1}) \in \mathbb{Z}^{n+1}$ occurring in $f$, $a.m=1$. Also for convenience write $a_i=\frac{b_i}{c_i}$ in lowest terms. Then for $0 \in X \subset \mathbb{C}^4$ canonical, we have (\cite{Ca}):
+%\begin{equation}
+%\rho(X)=\sum_{I \in \mathcal{P}({1,2,3,4})}\frac{(-1)^{|I|}}{a_I [c_I]}
+%\label{Rho}
+%\end{equation}
+%where $a_I:=\prod_{i \in I}a_i$ and $[c_I]:=\text{lcm}(c_i|i \in I)$. We use the convention that $a_{\phi}=1=[a_{\phi}]$.
+
+%\begin{eg}
+%Let's quickly do the ordinary degree $n$ 3-fold singularity given by $\{x_1^n+x_2^n+x_3^n+x_4^n=0\}$. Then $a_i=\frac{1}{n}$ and $c_i=n$ for all $i$ and \eqref{Rho} gives:
+%\begin{equation*}
+%\rho(X)=(n-1)(n^2-3n+3)
+%\end{equation*}
+%so an ODP has $\text{Cl}(X,0)\cong \mathbb{Z}$ and an OTP has $\text{Cl}(X,0) \cong \mathbb{Z}^6$. Recall for the ODP we have already seen the non-$\mathbb{Q}$-Cartier surface $S \subset W$, so this result says that there are no other non-Cartier divisors through $0 \in W$. In these cases, it is easy to see what the answer should be since we know their
+
+%\end{eg}
+%\end{rem} 
+
+We now put this together and illustrate how to compute Betti numbers in a few examples.
+
+\begin{eg} Let's compute the effect of a conifold transition in $n$ disjoint $S^3$s in a 6-manifold $X$. Notice that $E=\coprod_{i=1}^n \mathbb{P}^1$ and $M \simeq \vee_{i=1}^n S^3$ so the conditions $H_2(M)=0$ and $H_3(E)=0$ are both satisfied. Further note that $m=0$ so $r=l$. The exact sequences yield $b_3(X) = b_3(\bar{X})+r$ and $b_3(\bar{X}) = b_3(Y)+l$ and so $b_3(Y)=b_3(X)-2r$.
+
+\eqref{Mil} gives $b_i(\bar{X})=b_i(X)$ for $i=1,2,5$ and $b_4(\bar{X})=b_4(X)+n-r$.\eqref{Ler} gives $b_i(Y)=b_i(\bar{X})$ for $i=1,4,5$ and $b_2(Y)=b_2(\bar{X})+n-l$.  So we conclude $b_1(Y)=b_1(X)$ (in fact, $\pi_1(Y)=\pi_1(X)$), $b_2(Y)=b_2(X)+n-r$, $b_4(Y)=b_4(X)+n-r$, $b_5(Y)=b_5(X)$.
+
+We can in fact see what is going on here geometrically. When we degenerate $X$ to $\bar{X}$, we crush the $r$ dimensions of the vanishing cycles in $H_3(X)$ to points. Where do the remaining $r$ dimensions of $H_3(X)$ that we lose come from? They are the Poincare dual 3-cycles to the vanishing cycles. Note that, as the cohomology calculation makes clear, we do not lose these on degenerating but only when we come to resolve, when these 3-cycles on the singular 3-fold lift to have boundary on the exceptional curves. 
+
+What about the 2-cycles? When we resolve we gain $n$ new $\mathbb{P}^1$s but these are not all independent in homology. By the reverse of the argument above, a relation between the exceptional curves corresponds to a 3-cycle dual to some vanishing cycles, of which there are $r$. So we expect $n-r$ new dimensions of 2-cycles in $Y$. 
+
+Finally, for 4-cycles, note that no new ones are added when resolving and we keep the ones we had since, if one lifted to have boundary, that boundary would have to be a 3-chain living on some $\mathbb{P}^1$s (which is too small). However, upon degeneration, the $n-r$ independent relations between the vanishing cycles, become new 4-cycles as their boundaries are crushed to points (and they remain independent).  
+
+\end{eg}
+
+\begin{eg}
+Now consider what happens when we transition through a single OTP in a 3-fold. We'll show in \ref{OTPAgain} that the vanishing cycle consists of 16 $S^3$s. We also have a crepant resolution $Y \rightarrow \bar{X}$ with exceptional set $E \subset \mathbb{P}^3$, a cubic surface. Hence the conditions $H_2(M)=0$ and $H_3(E)=0$ are both met. 
+
+\eqref{Mil} gives what we found above with $n$ replaced by 16. \eqref{Ler} gives the above with $n$ replaced by 7 ($=b_2(E)$ - it's the blow-up of $\mathbb{P}^2$ in 6 points) and, since $\chi(Y)=\chi(X)+24$, $m=r-l=10$.
+
+The end result is that $b_i(Y)=b_i(X)$ for $i=1,5$ and $b_i(Y)=b_i(X)+17-r$ for $i=2,4$ and $b_3(Y)=b_3(X)+10-2r$
+
+\end{eg}
+
+\section{Surgeries}
+
+We saw earlier examples of transitions in the algebraic and complex settings. In the algebraic setting, we discussed how mirrors to extremal transitions should again be extremal transitions (and discussed the mirror to a conifold transition) and hence we should expect some symplectic surgery which mirrors the complex picture.	
+
+This is an interesting prospect and it helps shed some light on the similarities and differences between the algebraic, complex and symplectic worlds. One aspect of this is trying to see how far one can get with a symplectic version of the minimal model programme. To that end, we introduce the following trichotomy.
+
+\begin{df}
+A symplectic manifold $(X,\omega)$ is called:
+\begin{itemize}
+\item \textit{Symplectic Fano} if $c_1(TX,\omega)=[\omega]$
+\item \textit{Symplectic Calabi-Yau} if $c_1(TX,\omega)=0$
+\item \textit{Symplectic general type} if $c_1(TX,\omega)=-[\omega]$
+\end{itemize}
+\end{df}
+
+On the one hand, we have results for symplectic 4-manifolds such as every symplectic Fano is in fact 'K{\"a}hler Fano' i.e. it's a del Pezzo surface. But, beyond 4-manifolds, we don't know whether this result generalises. We also have that any symplectic K3 is homeomorphic to some (and so every) K3 surface. 
+
+On the other hand, for general 4-manifolds, K{\"a}hler and symplectic geometry are quite different. One reason for this is that we have symplectic but non-K{\"a}hler surgeries, namely fibre connect sums $X_1 \#_Q X_2$ between two symplectic manifolds $(X_i,\omega_i)$ for $i=1,2$ containing a symplectic codimension 2 closed submanifold $Q$ such that $N_{Q/X_1}$ is opposite to $N_{Q/X_2}$ i.e. $c_1(N_{Q/X_1})=-c_1(N_{Q/X_2})$.   
+
+We can use this operation to construct closed symplectic 4-manifolds with any finitely presented group as its fundamental group, whereas K{\"a}hler manifolds have restrictions here (e.g. we can't have $SL_n(\mathbb{Z})$). Later we'll discuss symplectic blow-ups and it turns out that blow downs can be interpreted in terms of fibre connect summing: to blow down an exceptional symplectic submanifold $E \cong \mathbb{P}^{n-1}$ sitting inside $(X,\omega)$ with normal bundle $\mathcal{O}_{\mathbb{P}^{n-1}}(-1)$, we can  fibre connect sum with $\mathbb{P}^{n-1} \subset \mathbb{P}^n$, since the complement $\mathbb{P}^n\backslash \mathbb{P}^{n-1} \cong B^{2n}$ is a ball.
+
+We know how to blow down such things algebraically too, but symplectically we can go further and blow down, for example, $(-4)$-spheres in a 4-manifold. To do this, we take the fibre connect sum with a conic $C \subset \mathbb{P}^2$, since, by Bezout, this has $[C]^2=4$. We can use this specific example to construct a simply-connected closed 4-manifold which is not K{\"a}hler: the four-time connect sum of a rational elliptic surface $E(1) \rightarrow \mathbb{P}^1$ contains such a $(-4)$-sphere which we can blow down to get a minimal simply-connected symplectic 4-manifold which violates the Noether inequality, and hence is non-K{\"a}hler.
+
+For symplectic 6-manifolds, the conifold surgery we will construct later preserves $c_1=0$ so we expect to have a divergence between symplectic and K{\"a}hler Calabi-Yau 3-folds too. Even in dimension 4, these are different with the classic example being the Kodaira-Thurston manifold. This example can be generalised by thinking of it as the quotient of a nilpotent Lie group by a cocompact lattice. In fact, there is nothing to suggest all minimal 4-dimensional symplectic non-K{\"a}hler Calabi-Yaus don't arise in this way. In 6 dimensions, we get symplectic (non-K{\"a}hler) Calabi-Yaus from a similar approach and others arise from hyperbolic geometry, as discussed in \cite{Pa}.
+
+In a different direction, symplectic surgeries are harder to come by than contact ones, such as the usual connect sum, which is contact but generally not symplectic. On the flip side, the contact category is more flexible with any orientable 3-manifold (as well as many 5-manifolds) admitting contact structures. At first sight, this may seem tangential but we can think of our surgeries as swapping the Lagrangian and complex fillings of the link (which is of contact type).
+
+Now that we have motivated symplectic surgeries, how do we construct them? We should base it upon a local model, like the one for ODPs in Section 2. So start with an IHS given by $\bar{X}=\{f=0\}$ and consider the smoothing $X=\{f=t\}$ (symplectically this is well-defined as all such are symplectomorphic via symplectic parallel transport) and some resolution $Y\rightarrow \bar{X}$ (this might be a big blow-up or small resolution, for example). Note that parallel transport also gives us a 'blow-up' map $X \rightarrow \bar{X}$ with 'exceptional locus' a Lagrangian cycle, so we now have a local model akin to Figure \ref{fig:ODP}. Since the parallel transport and proper transform of the link of the singularity are contactomorphic (and $\omega$-convex), we have a well-defined symplectic transition (in both directions) in the local model. 
+
+So globally we'll build a symplectic surgery starting with a collection $C$ of Lagrangians in $(X,\omega)$ with a neighbourhood (or finitely many such) which is symplectomorphic to a neighbourhood of the vanishing cycles of a K{\"a}hler manifold with a K{\"a}hler degeneration which collapses $C$ to an IHS. 
+
+We may then collapse these Lagrangians, resulting in a singular space with charts around the singular points given by a neighbourhood $V$ of $0 \in W:=\{f=0\} \subset \mathbb{C}^{n+1}$ where $f$ defines the relevant hypersurface singularity. In this chart, $\omega= \omega_{\mathbb{C}^{n+1}}|_V$.  
+
+\begin{rem}
+For most of what follows, we shall deal with the case of isolated Lagrangians but we can use the above in the more general setting. For example, one can consider linear chains of Lagrangians. In 4 dimensions these arise as vanishing cycles for $A_n$-singularities and, being simple singularities, do not change the diffeomorphism type of the manifold (we'll see this in \ref{Surf}). However, in 6 dimensions, the smoothings and resolutions are no longer diffeomorphic and so one might hope to obtain more new smooth manifolds which admit symplectic structures via these more complicated surgeries. We'll return to this in Section 5.4.
+
+In fact, we can apply the transition to much more general collections of Lagrangian spheres intersecting transversely, since once one knows how they intersect, one knows the symplectic structure locally. More precisely:
+
+\begin{lem}
+Given such a collection of Lagrangians $L_i$ such that combinatorially there is no cycle, then the symplectic structure near to the $L_i$ is unique up to symplectomorphism.
+\end{lem}
+
+\begin{proof}
+For disjoint Lagrangians, this is Weinstein's theorem. In our case, since the intersections are transverse, we can describe such a neighbourhood as a plumbing of $(\coprod T^*L_i,\omega_{can})$ where we identify a neighbourhood $D^n \times D^n$ in $T^*L_i$ and $T^*L_j$ (here $D^n$ is a symplectically embedded ball in some Darboux chart around the intersection of $L_i$ and $L_j$) via the map $(x,y) \mapsto (y,x)$.
+
+In this description, different local symplectic structures give different choices of $D^n$ and we can move between these by lifting a diffeomorphism $\coprod L_i \rightarrow \coprod L_i$ with the correct derivative.
+\end{proof}
+
+\label{Chains} 
+\end{rem}
+
+\subsection{Symplectic Blow-ups}
+
+We now describe how to construct a symplectic form on the blow-up of a symplectic manifold $(X^{2n},\omega_X)$ at $p \in X$. This completes the task of constructing a \textit{global symplectic} surgery which replaces the configurations of Lagrangians $C$ with exceptional divisors $E$. Furthermore, this will suggest how to go about constructing a symplectic form (when one exists) on the conifold transition, something we'll return to in \ref{Sympl2}.
+
+Smoothly, the blow-up $\pi: Y \rightarrow X$ is given by picking local complex coordinates around $p$, removing $p$, and then gluing in the standard complex local model $Z \subset \mathbb{C}^n \times \mathbb{P}^{n-1}$ (which comes with a natural K{\"a}hler form $\omega_Z = (\omega_{\mathbb{C}^{n}} \oplus \omega_{\mathbb{P}^{n-1}})|_Z$).
+
+\begin{lem}
+The blow-up $Y$ is symplectic.
+\label{Sympl}
+\end{lem}
+
+\begin{proof}
+Take a Darboux chart $\phi: V \subset X \rightarrow \mathbb{C}^n$ such that $p \mapsto 0$. This gives us a chart $\phi': U \subset Y \rightarrow Z$ on the blow-up around the exceptional divisor $E \subset Y$. 
+
+Now pick a representative $\sigma$ of $\text{PD}[-E] \in H^2(Y,\mathbb{Z})$ supported on $U$. Since $Z \cong \mathcal{O}_E(-1)$, a 2-form on $U$ is determined by its integral on $\mathbb{P}^1$ in $E$. Noting that $\int_{\mathbb{P}^1}\omega_{FS} = \pi$, we see that $\sigma|_U$ and $\omega_Z/\pi$ are cohomologous i.e. $\sigma|_U = \omega_Z/\pi +d\psi$ for $\psi \in \Omega^1(U)$. Extending $\psi$ by 0 to $Y$, we see that $\sigma':=\sigma - d\psi \in \Omega^2(Y)$ is still dual to $[-E]$ but now $\sigma'|_U=\omega_Z/\pi$.
+
+\textit{Claim}: For all $\epsilon$ small enough, $\omega_Y:=\pi^*\omega_X+\epsilon\sigma'$ is a symplectic form on all of $Y$.
+
+We shall analyse what happens in 3 different regions separately. 
+
+\begin{itemize}
+\item On $Y\backslash U$, this is true since $\pi^*\omega_X$ is symplectic and non-degeneracy is an open condition. 
+
+\item On $E$ itself, $\omega_Y=\epsilon\omega_Z/\pi$ which is symplectic (in fact, K{\"a}hler) and hence, as above, still is on an open neighbourhood $U' \subset U$ of $E$. 
+
+\item Finally, on $U\backslash U'$, $\omega_Y=\pi^*\omega_{\mathbb{C}^n} + \epsilon \omega_Z/\pi$ is a convex combination of the forms $\pi^*\omega_{\mathbb{C}^n}$ and $\omega_Z/\pi$, both of which tame the same complex structure (locally $\pi: Z \rightarrow \mathbb{C}^n$ is holomorphic) on $Z$. Hence $\omega_Y$ is symplectic here too.
+\end{itemize}
+\end{proof}
+
+\begin{rem}
+What we did here was to perturb the original form $\pi^*\omega_X$, which is non-degenerate precisely along $E$, with (roughly) $\text{PD}[-E]$ which is nice near $E$. We'll use the same ideas to construct a symplectic form on the conifold transition except in that case, a priori we won't have a 4-cycle $E$, only a 2-cycle $C$. The relation among the Lagrangians will instead provide us with the necessary 4-cycle.
+\end{rem}
+
+So far as presented, unlike for the complex category, it is not at all clear that the symplectic blow-up is well-defined. Indeed, it doesn't seem possible to lift an arbitrary symplectomorphism $f:(\mathbb{C}^n,\omega_{st})\rightarrow (\mathbb{C}^n,\omega_{st})$ sending $0\mapsto0$ to one of $Z$. 
+
+In order to control the choices we are making above (with the hope of ending up with something more intrinsic), we can standardise the procedure by fixing some $\lambda >0$ and considering a symplectic embedding of the standard $2n$-ball $\phi: (B^{2n}(\lambda),\omega_{st}) \hookrightarrow (X^{2n},\omega)$. Furthermore we fix the local model and K{\"a}hler form for the blow-up, with exceptional divisor $E \cong \mathbb{P}^{n-1}$:
+\begin{center}
+\begin{tikzcd}
+\mathbb{P}^{n-1} & \arrow{l}{p} (Z,\rho_{\lambda}=\pi^*\omega_{\mathbb{C}^n} + \lambda^2p^*\omega_{FS}) \arrow{r}{\pi} & \mathbb{C}^n 
+\end{tikzcd}
+\end{center} 
+
+If we let $Z(\delta):=\pi^{-1}B(\delta)$, the key local statement below relates a neighbourhood $Z(\delta)$ of $E$ to a 'standard shell':
+
+\begin{lem}
+For all $\lambda, \delta >0$, we have a symplectomorphism between $(Z(\delta)\backslash E,\rho_{\lambda})$ and $(B(\sqrt{\lambda^2+\delta^2})\backslash B(\lambda),\omega_{st})$ given by $\pi$ followed by the radial map 
+\begin{equation*}
+F:\mathbb{C}^n\backslash \{0\} \rightarrow \mathbb{C}^n\backslash B(\lambda) \text{ ,  } z \mapsto \frac{z}{|z|}\sqrt{|z|^2+\lambda^2}
+\end{equation*}
+\label{Blowup}
+\end{lem}
+
+This allows us to form the blow-up of weight $\lambda$ by extending $\phi$ a little, removing $B(\sqrt{\lambda^2+\delta^2})$ and then gluing in $Z(\delta)$. So the blow-up removes a standard ball and collapses down the boundary to become the new exceptional divisor. Consequently, it increases the topology but reduces the volume.
+
+\begin{rem}
+Note that $\lambda$, which was the radius of the original ball, on the blow-up determines the area of curves in the exceptional divisor. Hence this $\lambda$ is 'cohomological' on the blow-up.
+\label{Rem1}
+\end{rem}
+
+\subsection{Symplectic Transitions through ODPs}
+
+It is now not hard to modify the above to deal with blow-ups of ODPs (or blow-ups of IHS defined by (weighted) homogeneous polynomials if we allow ourselves to iterate this procedure). We simply use the local model coming from the complex blow-up of the ODP i.e. we use instead the diagram:
+\begin{center}
+\begin{tikzcd}
+\mathbb{P}^n \supset (E,\omega_{FS}|_E) & \arrow{l}{p} (Z,\rho_{\lambda}=\pi^*\omega_{\mathbb{C}^n} + \lambda^2p^*\omega_{FS}) \arrow{r}{\pi} & (W,\omega_{\mathbb{C}^{n+1}}|_W) \subset \mathbb{C}^{n+1} 
+\end{tikzcd}
+\end{center}
+where $E$ is a quadric in $\mathbb{P}^n$. The restriction of \ref{Blowup} gives the necessary local statement. Hence, in combination with the degeneration described earlier, we now have the whole transition $X \rightarrow \bar{X} \leftarrow Y$, where $Y$ has a distinguished deformation class of symplectic forms depending on $\lambda$. We can think of this transition as crushing the vanishing cycles to a singularity, then removing a ball around this and quotienting its boundary by the natural $S^1$-action coming from the characteristic foliation. Moreover (c.f. \ref{Rem1}), on $Y$, $\lambda$ governs the area of curves in the exceptional set $E$ and on $X$ determines the size of the standard disc bundle over the Lagrangian. 
+
+Further note that having a deformation class of forms on $Y$ gives us a well-defined (homotopy class of) almost complex structure, so we can talk about $c_1(Y)$.
+
+\begin{rem}
+The effect on $c_1$ of the transition in $k$ disjoint Lagrangians $L_i$  is to send $c_1(X)$ to $c_1(Y)+(n-2)\Sigma_{i=1}^k\text{PD}[-E_i]$ for $n\geq 3$. First, note that $c_1(X)|_{L_i} =0$ for dimension reasons and so $c_1(X) \in H^2(X,\cup L_i) \cong H^2(\bar{X}) \cong H^2(Y,\cup E_i)$. The claim is that the image of $c_1(X)$ under $H^2(Y,\cup E_i) \rightarrow H^2(Y)$ is $c_1(Y)+(n-2)\Sigma_{i=1}^k\text{PD}[-E_i]$. As $\pi$ is an isomorphism away from the exceptional divisors, we need only check that, on the local model $Z$, $c_1(Z)=(n-2)\text{PD}[-E]$. Furthermore, as $Z$ retracts onto $E$, we need only show $c_1(Z)|_E=(n-2)\text{PD}[-E]|_E=(n-2)[\omega_{FS}/\pi]$. But adjunction says $c_1(Z)|_E=c_1(E)+c_1(N_{E\backslash Z})=(n-1)[\omega_{FS}/\pi]+[-\omega_{FS}/\pi]$, where we used the fact that $E$ is a quadric in $\mathbb{P}^n$ (so we know its canonical bundle) to compute $c_1(E)$. If one cared, this calculation also shows that, for $n \geq 3$, the ODP is terminal with discrepancy $n-2$.
+\end{rem}
+
+Recall, when discussing blowing-up, we considered embedding standard balls of radius $\lambda$ into our symplectic manifold $X$. It is natural to ask what is the maximum $\lambda$ for which we can do this and the generalisation of this which asks, for a fixed $k \geq 1$, what is the maximum radius $r$ (call it $r_k$) for which we have $k$ disjoint standard symplectic balls of radius $r$ in $(X,\omega)$. In general, not much appears to be known about these, but for closed 4-manifolds, we know that for large enough $k$ we can find such a collection which takes up all the available volume ($\int_M \frac{\omega^2}{2}$). For $\mathbb{CP}^2$, we can take $k \geq 9$ and for $k <9$, we actually have explicit descriptions of optimal packings.
+
+In the present case, we have the variant of the above where we are interested in finding the maximum standard neighbourhood $U(C)$ of the Lagrangian in question. To do this, we fix the model for our Lagrangian sphere to always be $S^n \subset T^*S^n$ and ask what is the maximum $\lambda$ such that $V(\lambda):=\{v \in T^*S^n | |v| \leq \lambda \}$ sits symplectically around $L$. 
+
+One can try to understand obstructions to having packings of the type described above in symplectic Fanos by the following theorem (noting that we can find examples of symplectic Fanos e.g. $(\mathbb{P}^2\times \mathbb{P}^1,-3\omega_{FS}/\pi\oplus 2\omega_{FS}/\pi)$ for which the $(1/2\pi)$-disc bundle has strictly less volume than the manifold itself).
+
+\begin{lem}
+If we can find a symplectically standard neighbourhood $V(\lambda)$ of a Lagrangian $L$ in a symplectic Fano $(X^{2n},\omega)$ (for $n \geq 3$) with $\lambda>(n-2)/2\pi$, then the transition $Y$ in $L$ has some of its distinguished symplectic forms lying in $c_1(Y)$. Hence this surgery preserves symplectic Fanos.
+\end{lem} 
+
+\begin{rem}
+If such a surgery is in fact possible, we might hope to use it to construct 'exotic' (i.e. non-K{\"a}hler) symplectic Fano 3-folds. This problem is made more tractable by the classification of Fano 3-folds.
+\end{rem}
+
+\begin{proof}
+We already know $c_1(Y)=\text{im}c_1(X)+(n-2)\text{PD}[-E]$ and that the forms $\omega_Y$ constructed on $Y$ live in $\text{im}[\omega_X]+\pi \mu^2 \text{PD}[-E]$ where $\mu$ is the radius of the standard ball around $0 \in W$ (Recall \ref{Blowup} restricted to $W$). So we only have to show that they reach $c_1(Y)$ i.e. we want $\mu \geq \sqrt{(n-2)/\pi}$. But under the local model, a ball of radius $r$ around $0 \in W$ goes to a disc-bundle of radius $r^2/2$ in $T^*S^n$. So if $\lambda=(n-2)/(2\pi)+\delta$ for $\delta>0$, that corresponds to a ball of radius $\mu=\sqrt{(n-2)/\pi + 2\delta}>\sqrt{(n-2)/\pi}$ as required.
+\end{proof}
+
+Let's explore what happens with more complicated collections of Lagrangians.
+
+\paragraph*{Construction:}
+We build Lagrangian $S^3$s in some fibre products of two smooth complex surfaces $S_1$ and $S_2$ over a curve $C$. Call the fibre maps $\pi_i: S_i \rightarrow C$. Suppose we have a local model for $S_i$ of the form $\{f_i(x_i,y_i)=t\} \subset \mathbb{C}^2 \times \mathbb{C} \rightarrow t \in \mathbb{C}$. Then locally $S_1 \times_C S_2$ looks like:
+\begin{equation*}
+\{f_1(x_1,y_1)=f_2(x_2,y_2)\} \subset \mathbb{C}^2 \times \mathbb{C}^2
+\end{equation*}
+So we get singularities of $S_1 \times_C S_2$ only when $(x_1,y_1)$ and $(x_2,y_2)$ are singular and lie over the same point $t \in \mathbb{C}$ of the base. So if $f_i=x_i^n+y_i^n$ (so that the curve over $t=0$ in both $S_i$ has a degree $n$ singularity), the above model shows that $S_1 \times_C S_2$ has a 3-fold degree $n$ singularity at $0 \in \mathbb{C}^4$.
+
+Suppose for the moment, that the $S_i$ contain at worst nodal singularities in their fibres and that they have no singular fibres in common (which means that the fibre product is smooth). Suppose, moreover, both $S_i$ are K{\"a}hler (hence so is $S_1 \times_C S_2$ endowed with the restriction of the product form). Then given any $a,b \in C$ such that $a$ is a critical value for $\pi_1$ and $b$ is a critical value for $\pi_2$, pick a path $\gamma \subset C$ which misses all the other critical values of both fibrations. For $i=1,2$, we have Lefschetz thimbles $\Delta_i \subset S_i$ over $\gamma$ associated to the nodes in the fibres at $a$ and $b$. The picture to have in mind is Figure \ref{fig:Fibred}.
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{S1S1} 
+\caption{Lagrangian $S^3$ in $S_1 \times_{C} S_2$ fibred over $\gamma$}
+\label{fig:Fibred}
+\end{figure}
+
+Note that $\partial \Delta_1 \subset (S_1)_b$ is a Lagrangian $S^1$ and, similarly  $\partial \Delta_2 \subset (S_2)_a$ is a Lagrangian $S^1$. Now $L:=\Delta_1 \times_{\gamma} \Delta_2$ is an $S^1 \times S^1$-fibration over the interior of $\gamma$, collapsing to single $S^1$s (which span $H_1(T^2)$) at the endpoints. So, over each half of $\gamma$, we have a solid torus which we then glue along different circles to recover the representation of $S^3$ as a genus one Heegaard splitting.
+
+Furthermore, since the thimbles $\Delta_i$ are Lagrangian and $TL \subset T\Delta_1 \oplus T\Delta_2$, we see that $L$ is a Lagrangian $S^3 \subset S_1 \times_C S_2$ (its smoothness follows from the fact that the thimbles $\Delta_i$ are smooth at their origins).
+
+We shall apply this to now see the vanishing cycles in various smoothings and hence give examples of more complicated transitions than considered before.
+
+The simplest case is when we have a null-homologous Lagrangian $S^3$. This arises from the present construction whenever the vanishing $S^1$ associated to some node in each $S_i$ is homotopically trivial (so, for example, a fibre product with no singular fibres in common and with some reducible fibre (in each $S_i$) having an $S^2$ component meeting the other components transversely at one point). To see this, fill in the $S^1 = (\Delta_1)_{\gamma(t)}$ for all $t$ to get a 3-chain $D \subset S_1$ with an $S^2$ over $a \in C$. Then $\partial (D \times_{\gamma} \Delta_2)=L + S^2 \times (\Delta_2)_a$. But $S^1 = (\Delta_2)_a$ is contractible, so we can also fill that in to get a $D^2$ $D' \subset (S_2)_a$ such that $\partial (S^2 \times D')=S^2 \times (\Delta_2)_a$. Hence $L$ is a boundary.    
+
+
+\begin{eg} Transition through an OTP \\
+Now we return to the 3-fold OTP and use the construction above to show that the smoothing has 16 Lagrangian vanishing cycles (a quick computation shows the Milnor number is 16), labelled $ij, \gamma i, i \gamma, \gamma \gamma$ below for $i,j=1,2,3$, which intersect according to Figure \ref{fig:OTPSmoothing}
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{3foldOTP} 
+\caption{Left: Paths in $\mathbb{C}$ over which we have vanishing cycles. Right: Intersection pattern of the vanishing cycles}
+\label{fig:OTPSmoothing}
+\end{figure}
+
+By what we said above, an OTP 3-fold point arises when we take the fibre product of two copies of a surface with central fibre an OTP on a curve. We saw (in \ref{OTP}) that the smoothing of such a surface has 4 $S^1$ vanishing cycles, associated to two singular fibres, one over $t=0$ having an $I_3$ fibre and one over $t=(\epsilon/3)^3$ with a node. Currently, the fibre product is still singular because both the fibres over $0$ and $(\epsilon/3)^3$ are singular. We rectify this by translating the base of the second factor of the fibre product by $\eta$, pulling apart the singularities. The above construction then tells us that the fibred $S^3$s connecting each pair of singularities which were pulled apart is the corresponding vanishing cycle. A quick glance at Figure \ref{fig:OTPSmoothing} will confirm there are 16 such, as expected.
+
+Now that we know the configuration of Lagrangians necessary for the surgery, we can seek to apply it. We are therefore looking for a fibred surface with an OTP in a fibre - a  natural place to look is elliptic surfaces. To this end, consider a rational elliptic surface $\pi: E(1) \rightarrow \mathbb{P}^1$ with four $I_3$ singular fibres such as $\{x_1^3+x_2^3+x_3^3-tx_1x_2x_3\}$. Then symplectically we perturb a chosen fibre into one $I_1$ fibre and one $I_2$. The pattern of vanishing cycles coming from the $I_1$ fibre and another $I_3$ fibre shows that bringing these together gives the desired OTP in a fibre. Hence the fibre product of this with itself has a 3-fold OTP which can be blown up to get a Calabi-Yau. 
+\label{OTPAgain}
+\end{eg}
+
+\subsection{Symplectic Conifold Transitions}
+
+In the 3-fold case, we can again modify the construction to produce a \emph{conifold} transition by using the local model (described in Section 2) of the small resolution. A priori this will not be symplectic as \ref{Sympl} breaks down, so we'll first show that, once we have made $2^n$ choices, the conifold transition is well-defined as a smooth manifold. Then we show how to modify \ref{Sympl} to get a \textit{symplectic} surgery which replaces a collection of Lagrangian 3-spheres $L_i$ with symplectic 2-spheres $C_i$.
+
+What are the choices to construct $Y$? First we orient the $L_i$ (so there are $2^n$ choices here) and pick a an orientation-preserving diffeomorphism $\phi: L_i \rightarrow S^3$ (this is unique up to homotopy since $\text{Diff}^+(S^3)\simeq SO(4)$). This lifts naturally to a symplectomorphism $\phi': T^*L_i \cong T^*S^3$ with their canonical forms. By Weinstein's theorem, we may identify a neighbourhood $U_i$ of $L_i$ with a neighbourhood of the 0-section in $T^*L_i$ (this involves choosing a compatible almost complex structure which form a contractible space). Overall, after picking orientations, we get a unique (up to homotopy) symplectomorphism $\psi_i: U_i \rightarrow T^*S^3$. Recall we had a symplectomorphism $\eta: W^{\pm}\backslash \mathbb{P}^1 \rightarrow T^*S^3\backslash S^3$. Then the construction outlined in the previous sections reduces to $Y=(X\backslash \cup L_i) \cup_{\psi_i^{-1} \circ \eta} \coprod W_i^{\pm}$. Given a choice of one of the small resolutions for each node, we then get a well-defined smooth manifold. In fact, since swapping the orientation on $L_i$ goes across to flopping the $\mathbb{P}^1$, we get only $2^n$ distinct possible conifold transitions.
+
+Note that we can also run the above in reverse, given a symplectic structure $\omega_Y$ on $Y$ and symplectic 2-spheres $C_i$ which have $c_1(N_{C_i \backslash Y})=-2[C_i]$. We may then identify symplectically (via a map $\chi$ say) a neighbourhood $V_i$ of each $C_i$ with a neighbourhood of the 0-section in $\mathcal{O}(-1)\oplus \mathcal{O}(-1)$ (plus a K{\"a}hler form giving $\mathbb{P}^1$ area $\int_{C_i} \omega_Y$) in a way that is unique up to homotopy. Then $X=(Y\backslash \cup C_i) \cup_{\chi^{-1} \circ \eta^{-1}} \coprod T^*S^3$ is well-defined as a smooth manifold and doesn't depend on any additional choices. Here we have used the fact that $W^{\pm} \cong   \mathcal{O}(-1)\oplus \mathcal{O}(-1)$ abstractly and, as a result, the new $S^3$s are not canonically oriented (despite appearances).
+
+\begin{rem}
+The transition, being symplectic, is naturally almost complex and crepant i.e. preserves $c_1$ (and hence the class of symplectic Calabi-Yaus).
+
+The proof is mostly the same as before, except now adjunction applied to the symplectic 2-sphere $C$ in the local model $Z$ gives $c_1(Z)|_C=c_1(C)+c_1(N_{C \backslash Z})=2[\omega_{FS}/\pi]+c_1(\mathcal{O}(-1)\oplus \mathcal{O}(-1))=0$.
+
+We can also see what happens to $c_2$: since $T^*S^3$ has a canonical (up to homotopy) trivialisation of its (holomorphic) tangent bundle, we may lift it to $H^4(X,\cup_i L_i) \cong H^4(\bar{X}) \cong H^4(Y,\cup_i C_i)$ and consider its image $\text{im}c_2(X) \in H^4(Y)$. The claim is that $c_2(Y)=\text{im}c_2(X)-\Sigma_i \text{PD}[C_i]$.
+
+As usual, we just need to consider the local model and here the only 4-forms are multiples of $\text{PD}[\mathbb{P}^1]$. So without loss of generality, $c_2(Y)=n\text{PD}[\mathbb{P}^1]$ and, by symmetry, $c_2(Y')=n\text{PD}[\mathbb{P}^1]$ too, where $Y'$ denotes the flop of $Y$ along $\mathbb{P}^1$.
+
+From a birational point of view, flops are designed to remove a curve which intersects some divisor $D \subset Y$ negatively and replace it with another curve which intersects its proper transform $D' \subset Y'$ positively. The precise way in which it does so takes the form:
+\begin{equation*}
+c_2(Y').D'=c_2(Y).D+2\text{PD}[\mathbb{P}^1].D
+\end{equation*}
+But if we take $D$ to be proper transform of the surface $S \subset W$ we considered in Section 2, then its intersection properties with $\mathbb{P}^1$ guarantee that $n=-1$, as we wanted.
+
+Finally $c_3=\chi$ is easy to compute: from the long exact sequences in Section 4 we see $\chi(Y)=\chi(X)+\Sigma_i\chi(C_i)-\Sigma_i\chi(L_i)=\chi(X)+2n$.
+
+We remark that, in particular, this means that $c_1c_2$ (using that $c_1(Y)$ and $\mathbb{P}^1$ are disjoint) and the condition $c_1^2=0$ are preserved by the surgery. 
+\label{Chern}
+\end{rem}
+
+So, to summarise, we have a diagram (where $\hat{X}$ is the big resolution):
+\begin{center}
+\begin{tikzcd}
+\text{ } & \hat{X} \arrow{d} \arrow{rd}  & \\
+X \arrow{r} & \bar{X} & \arrow{l} Y
+\end{tikzcd}
+\end{center}
+Now we have the mirror result to \ref{ComSmooth}.
+
+\begin{thm}
+Let $(X^6,\omega)$ have a disjoint set $L_i$ of $k$ Lagrangian embedded 3-spheres. These satisfy a 'good relation' $\Sigma \lambda_i [L_i]=0 \in H_3(X)$ with all $\lambda_i \neq 0$ iff one of the conifold transitions $Y$ admits a symplectic structure $\omega_Y$ for which all the $C_i$ are symplectic. 
+\label{Sympl2}
+\end{thm}
+
+\begin{proof}
+By the proof that the blow-up is symplectic (\ref{Sympl}), we need only construct a 4-cycle $\sigma$ on $Y$  with $\sigma.C_i=|\lambda_i|$ for each $i$. A choice of 4-chain bounding the $L_i$ becomes a 4-cycle $D$ on any conifold transition, since its $S^3$ boundaries are collapsed in the degeneration and there is no space on the exceptional $C_i \cong \mathbb{P}^1$s for the lift to have boundary.
+
+Let $U_i$ be a standard neighbourhood around each $L_i$. In this, define a collar neighbourhood of the 0-section by $\Delta=\{(u,v)|v_1=-\lambda u_2, v_2=\lambda u_1, v_3 = -\lambda u_4, v_4=\lambda u_3 $\text{ with } $\lambda \in \mathbb{R}_{\geq 0}$\}. So each $L_i$ has a collar neighbourhood $\Delta_i$ and we may arrange, by excision, that the relation $D$ looks like $\lambda_i$ times $\Delta_i \cap U_i$ near $L_i$.
+
+In the local model, $\Delta$ gets collapsed to $S \subset W$ and lifted to $\bar{S} \subset W^{\pm}$. From the intersection properties of $\bar{S}$ with $\mathbb{P}^1$ (see Section 2), we may pick the resolution near each node such that $\bar{S}.\mathbb{P}^1=1$. This gives a 4-cycle $\sigma$ on $Y$ such that  $\sigma.C_i=|\lambda_i|$.
+
+Conversely, given a symplectic form $\omega$ on $Y$, we may pick a Poincare dual 4-cycle $D$ which agrees with the local model and such that $D.C_i=\int_{C_i} \omega=:\lambda_i$ are all positive, since the $C_i$ are symplectic. Running the above argument backwards gives us our 'good relation'.
+
+\end{proof}
+
+\begin{rem}
+Note that, if we have a symplectic structure on the conifold transition coming from a 4-cycle $D$ as in the proof, then $-D$ gives a symplectic form on the 'opposite' conifold transition, given by choosing the other small resolution at each node.
+\end{rem}
+
+\begin{eg}
+It's not hard to find simple examples to apply this to. 
+Consider the local model of $S^3 \subset (\mathbb{C}^2\times \mathbb{P}^1,\omega_{st}\oplus \omega_{FS}/\pi)$ with the map to the first factor given by the unit norm inclusion and to the second factor given by the antipodal map composed with the Hopf map. This is a Lagrangian $S^3$ (hence the antipodal map above), bounding the 4-chain $\{(v,[v]) \in \mathbb{C}^2\times \mathbb{P}^1 | 0<|v|<1\}$. If we shrink the $S^3 \subset \mathbb{C}^2$, we can shrink the $\omega_{FS}$ factor to keep the $S^3$ Lagrangian.
+
+Hence for any symplectic 4-manifold $S$, using Darboux's theorem and picking sufficiently small $\epsilon$, we can use this model to construct arbitrarily many disjoint null-homologous Lagrangian $S^3$s in $(S \times \mathbb{P}^1,\omega_S \oplus \epsilon \omega_{FS}/\pi)$, to which we can apply our transition. So starting with $\mathbb{P}^2 \times \mathbb{P}^1$ and finding $k$ Lagrangians as above, we get new symplectic manifolds $Y$ with $b_2(Y)=2+k$ and $b_3(Y)=0$.
+\end{eg}
+
+\begin{eg}
+We can be more ambitious and apply the conifold transition to construct simply-connected symplectic Calabi-Yaus with $b_3=2$ and $2 \leq b_2 \leq 25$.
+
+Start with the quintic hypersurface $X_{\lambda}$ in $\mathbb{P}^4$ given by
+\begin{equation*}
+\sum_{i=1}^5 x_i^5-\lambda\prod_{i=1}^5x_i =0
+\end{equation*}  
+For $\lambda \in \mathbb{R}\backslash \{5\}$, $X_{\lambda}$ is a (smooth) K{\"a}hler 3-fold (with $b_1=0, b_2=1,b_3=204,c_1=0$) but at $\lambda = 5$, it picks up 125 nodes. These can be realised as the orbit of a node at $[1,1,1,1,1]$ under $G \cong (\frac{\mathbb{Z}}{5\mathbb{Z}})^3$, defined as the image of $\{(\zeta^{i_1},\zeta^{i_2},\zeta^{i_3},\zeta^{i_4},\zeta^{i_5}) \in \mu_5^5 | \Sigma_j i_j=0\}$ in $\text{PGL}_5$. By parallel transport, all the smooth $X_{\lambda}$ are symplectomorphic and contain 125 vanishing cycles associated to the nodes in $X_5$. 
+
+We want good relations between subsets of these and we go about this by finding 625 piecewise smooth Lagrangian 3-spheres which span $H_3(X)$ and then working out how our vanishing cycles intersect these. This then allows us to look for relations among the vanishing cycles (with a computer). We find $k$ (for every $102 \leq k \leq 125$) disjoint spheres, with 101-dimensional span. Then the conifold transition has $c_1=0, b_1=0,b_2=1+k-101, b_3=204-202=2$, as claimed.
+\begin{rem}
+In fact, our nodal 3-fold admits a small projective resolution so the $k=125$ case is a (rigid) K{\"a}hler manifold.
+
+As an aside, this example leads one to ask what is the maximum number of ODPs the quintic can have. We have an upper bound of 135 and there is an example with 130. For quartic hypersurfaces the answer is known to be 45.
+
+%If we could find a collection of Lagrangians taken from either these vanishing cycles or the 625 other Lagrangians spanning 102-dimensions of $b_3(X)$ (the maximum possible for a disjoint set since it would form an isotropic subspace of a symplectic vector space), then $b_3(Y)=0$ and the result must certainly be non-K{\"a}hler, as a simply-connected K{\"a}hler manifold with $c_1=0$ always has a non-zero holomorphic 3-form, which is closed but not exact. Unfortunately, there doesn't appear to be such a collection here, but we would at least then have a large collection of rigid Calabi-Yaus.
+\end{rem}
+
+\end{eg}
+
+We are interested in using this surgery to come up with non-K{\"a}hler symplectic Calabi-Yaus. In fact, we may construct such an example by starting with $X =E \times \mathbb{P}^1$ where $E$ is an Enriques surface. These are the complex surfaces with $H^0(E,K_E)=0$, $H^1(E,\mathcal{O}_E)=0$ and $K_E^{\otimes 2} \cong \mathcal{O}_E$ and can be realised as quotients of a K3 surface by a fixed-point free involution. The Betti numbers of $X$ are then $b_1(X)=0$, $b_2(X)=11$ and $b_3(X)=0$. We know how to construct null-homologous Lagrangians $L \cong S^3$ in such products and so we can form the conifold transition $Y$.
+
+We claim that there is no K{\"a}hler structure on $Y$ which has a K{\"a}hler form deformation equivalent to one of those we have constructed on $Y$. In combination with the lemma below (note $h^{2,0}(X)=0$), we have therefore constructed a Lagrangian sphere in a projective algebraic variety which does not arise from any K{\"a}hler degeneration. Note that this is \textit{not} because $L$ is null-homologous: a Lefschetz pencil of quadric 3-folds has a projective degeneration with null-homologous vanishing cycle.
+
+\begin{lem}
+Suppose we have a null-homologous Lagrangian $L$ in a K{\"a}hler manifold $(X,\omega)$, with $h^{2,0}(X)=0$, which we collapse via a K{\"a}hler degeneration. Then the forms we have constructed on the  conifold transition $Y$ are K{\"a}hler too.
+\end{lem}
+
+\begin{proof}
+\textit{(Sketch)}. We use the condition $h^{2,0}(X)=0$ to turn this into projective geometry and start by focusing on $\hat{X}$. The K{\"a}hler condition is open so we may choose $\omega$ to be rational and K{\"a}hler, and hence some multiple is projective.
+
+Since we have a K{\"a}hler degeneration, we know $h^{2,0}$ is constant throughout and we find $h^{2,0}(\hat{X})=0$. So the forms we construct on $\hat{X}$, of the form $\omega+\epsilon \sigma$, have some large multiple (at least those with $\epsilon \in \mathbb{Q}$) which is also projective. In other words, $\hat{X} \hookrightarrow \mathbb{P}^m$ with hyperplane $H$ dual to $[N(\omega+\epsilon \sigma)]$ for some $N \in \mathbb{Z}_{>0}$.
+
+We need to now relate $\hat{X}$ and the small resolution $Y$. The forms we constructed on $Y$ involve a 4-cycle coming from the 4-chain bounding $L$. Looking at its proper transform $\hat{D}$ in $\hat{X}$, $h^{2,0}(\hat{X})=0$ implies that it is a divisor. We claim that if we take $k \gg 0$, then the linear system $|\Delta|$ on $\hat{X}$ where $\Delta=k(H-N\epsilon \hat{D})$ gives us a commutative diagram:
+\begin{center}
+\begin{tikzcd}
+\hat{X} \arrow{d} \arrow{dr}{|\Delta|} & \\
+Y \arrow[hookrightarrow]{r} & \mathbb{P}^n
+\end{tikzcd}
+\end{center}
+where the downward arrow is the contraction of one of the $\mathbb{P}^1$ rulings. 
+
+Given this, the contraction takes $\hat{D}$ to the proper transform $D$ of the bounding chain in the small resolution (since the contraction satisfies $D.\mathbb{P}^1=1$) and so $\sigma \in H^2(\hat{X})$ descends to our $\sigma \in H^2(Y)$ as in the proof of \ref{Sympl2}. Thus we see that $N(\omega+\epsilon \sigma) \in H^2(Y)$ is projective, which suffices.
+
+For the claim, we refer to \cite{ST}, Prop 4.3.
+\end{proof}
+
+To prove the claim about $Y$, we'll turn it into a question about projective geometry and apply our understanding of extremal rays on 3-folds. Each of the resulting possibilities will impose certain restrictions on the Chern classes of $Y$, which differ from obstructions arising from, for example, Hard Lefschetz and the Hodge-Riemann bilinear relations.
+
+As in the proof above, $Y$ is projective once we can show $h^{2,0}(Y)=0$ for any K{\"a}hler structure. In the present case, this follows from the topology. We know that $b_1(Y)=0$, $b_2(Y)=12$ and $b_3(Y)=0$. Since $Y$ is K{\"a}hler, $H^1(\mathcal{O}_Y)=0$ and $H^3(\mathcal{O}_Y)=0$. Hence $\chi(\mathcal{O}_Y)=1+h^2(\mathcal{O}_Y)=\frac{c_1(Y)c_2(Y)}{24}$ by Riemann-Roch. By Remark \ref{Chern}, $\frac{c_1(Y)c_2(Y)}{24}=\frac{c_1(X)c_2(X)}{24}=\chi(\mathcal{O}_X)=1$. Thus we conclude $h^2(\mathcal{O}_Y)=h^{2,0}(Y)=0$.
+
+We are now in a position to use the result of Mori classifying the possible $K_Y$-negative extremal rays (these exist if $K_Y$ is not nef) associated to a smooth projective 3-fold (For a precise statement, see \cite{CS}). One can rule out each of the possibilities that arise by a good topological understanding of the transition, using all of the results in \ref{Chern}.
+
+\subsection{Generalised Conifold Transitions}
+
+One way in which we can seek to generalise conifold transitions is through symplectic \emph{hyperconifold} transitions. We begin with the local model. Recall in Section 3.2, we considered $W/\mathbb{Z}_n=:\mathcal{C}_{n,k}$ where
+\begin{equation*}
+\zeta: (x_1,x_2,x_3,x_4) \mapsto (\zeta x_1,\zeta^k x_2,\zeta^{-k} x_3, \zeta^{-1} x_4)
+\end{equation*}
+for $\zeta=e^{2\pi i /n} \in \mathbb{Z}_n$. Note that this is a symplectic action so the form $\omega_{st}$ descends to $\mathcal{C}_{n,k}$ and the smoothing $W_t/\mathbb{Z}_n$ (where $W_t:=\{x_1x_4-x_2x_3=t\}$. We claim that the change of coordinates is a symplectomorphism
+\begin{eqnarray*}
+(W_t,\omega_{st}) \rightarrow & (\{z_1^2+z_2^2+z_3^2+z_4^2=2t\},\omega_{st})\\
+(x_1,x_2,x_3,x_4) \mapsto & \frac{1}{\sqrt{2}}(z_1+iz_2,i(z_3+iz_4),i(z_3-iz_4),z_1-iz_2)
+\end{eqnarray*}
+and that, under identifying the latter with $(T^*S^3,\omega_{can})$ (as considered in Section 2), the above $\mathbb{Z}_n$ action goes across (up to a possible conjugation) to the induced action on $T^*S^3$ coming from:
+\begin{equation*}
+\zeta: (u,v) \mapsto (\zeta u, \zeta^k v) \text{ for } (u,v) \in S^3 \subset \mathbb{C}^2
+\end{equation*}
+Consequently, our picture descends by the $\mathbb{Z}_n$-action to give a symplectomorphism between the smoothing $(W_t/\mathbb{Z}_n,\omega_{st})$ and $(T^*L(n,k),\omega_{can})$, where $L(n,k)$ is the Lens space.
+
+Furthermore, from earlier we know that we have a projective crepant resolution $\phi:(\hat{\mathcal{C}}_{n,k},\hat{\omega}) \rightarrow (\mathcal{C}_{n,k},\omega_{st})$ with exceptional divisor $E=\cup E_i$. Then toric geometry shows there are $k_i \in \mathbb{Z}_{>0}$ such that $-\Sigma_i k_i E_i$ is relatively ample for $\phi$. 
+
+We may therefore run our earlier argument to construct a global \textit{hyperconifold} transition, which crushes a single Lens space $L(n,k)$ in $X$ to a point before resolving to get a symplectic manifold $Y$. Moreover, such a transition preserves $c_1=0$ but changes the fundamental group. This opens up another way to use surgeries to construct symplectic (non-K{\"a}hler) Calabi-Yaus, so long as there are restrictions on the fundamental group of K{\"a}hler Calabi-Yaus (which seems plausible).
+
+This surgery is not as hard to implement as it may seem at first sight. Start with a projective Calabi-Yau with a degeneration which picks up multiple $\mathbb{Z}_n$-hyperconifold singularities (such examples are known). The symplectic hyperconifold transition in one of the vanishing cycles yields a symplectic Calabi-Yau which is not projective in an obvious way. 
+
+Following Remark \ref{Chains}, we can go in a different direction and try to extend the conifold surgery by considering transitions in $A_n$-chains of Lagrangian 3-spheres. The associated compound $A_1$-singularities can be described as $A_1(n):=\{x_1^2+x_2^2+x_3^2+ x_4^{n+1}=0\}$. These admit small resolutions precisely when $n=2k-1$ is odd. When $n$ is even, the singularity is factorial and hence has no small resolution, since pullback of divisors would have to be an isomorphism which it cannot be as we can find a divisor on the resolution intersecting the exceptional curve positively. For $n$ odd, the small resolution is given by the $k$-fold covering of the resolution of the ODP.  So we have a diagram, where the exceptional set $E \subset X$ is now a $k$-fold cover of the exceptional $\mathbb{P}^1 \subset \mathcal{O}(-1)\oplus \mathcal{O}(-1)$:
+
+\begin{center}
+\begin{tikzcd}
+X \arrow{d}{\text{k-fold cover}}  \arrow{r}{\text{Resolve}}  & A_1(2k-1)= \{ \Sigma_{i=1}^3 x_i^2=t^{2k}\} \arrow{d}{t \mapsto t^k} \\
+ \mathcal{O}(-1)\oplus \mathcal{O}(-1)  \arrow{r}{\text{Resolve}} & W=A_1(1)=\{\Sigma_{i=1}^3 x_i^2=t^2 \}
+\end{tikzcd}
+\end{center}
+
+Unfortunately, the new 'generalised conifold transitions' these $A_n$-chains give rise to do not give us new 6-manifolds admitting symplectic structures. We can see this as follows. Such a transition would be given by removing a neighbourhood of these configurations and dividing out its boundary (the link) by the $S^1$-action on it given, in the local model, by $e^{i\theta}.(x_1,x_2,x_3,x_4)=(e^{ik\theta}x_1,e^{ik\theta}x_2,e^{ik\theta}x_3,e^{i\theta}x_4)$. 
+
+Now the link is $S^2 \times S^3$: we did this for $n=1$ earlier and for $A_n$, it should be the connect sum of the links along $S^2 \times S^2$. Thus it suffices to show $(S^2 \times S^3) \#_{S^2 \times S^2} (S^2 \times S^3) \cong S^5$.
+
+Recall one way to see that $S^3=(S^1 \times S^2) \# (S^1 \times S^2) =(S^1 \times D^2) \cup_{S^1 \times S^1} (S^1 \times D^2)$ is to find the torus $S^1 \times S^1 = \{|x_1|^2=|x_2|^2=1/2\} \subset S^3 \subset \mathbb{C}^4$ and, via a stereographic projection to $\mathbb{R}^3$, realise we can fill it inside and outside to get a description of the whole of $S^3$. Exactly the same thing works here with $S^2 \times S^2 =\{|x_1|^2+|x_2|^2=1/2=|x_2|^2+|x_3|^2\}$.
+
+So the link is the same for all $k$ (though the contact structures do in fact differ) and only the circle action varies with $k$. We know that quotienting by this gives the blow-up with exceptional divisor $\mathbb{P}^1 \times \mathbb{P}^1$ so, to get the small resolution, we crush down one of the rulings. This process gives a filling of the link $S^2 \times S^3$ with $b_2=1$. Moreover the filling given by a conifold transition in $k$ alternate spheres (as we're about to see) also has $b_2=1$. Then, as these fillings induce the same contact structure on the link, (conjecturally) they should be diffeomorphic and hence so are the transitions.
+
+We have to mention another neat way to see this, based on the algebraic trick of partially smoothing $A_1(2k-1)$. This takes the form $\hat{A_1}(2k-1)=\{ \Sigma_{i=1}^3 x_i^2=p_k(t^2)\}$ where $p_k$ is a degree $k$ polynomial with simple zeros and, geometrically has the effect of collapsing alternate spheres to ODPs. But $A_1(2k-1)$ is recovered in the limit $p_k \rightarrow t^{k}$, so the effect of a conifold transition in the $A_n$-chain is the same as collapsing the $k$ alternate spheres to ODPs and then taking the small resolution of just these. So it introduces $k$ exceptional $\mathbb{P}^1$s and we know from our earlier topology that the other $S^3$s give relations ($k-1$ of them) between these. So this filling has $b_2=1$ and, moreover, we can see where the exceptional $k$-times thickened $\mathbb{P}^1$ comes from.
+
+
+\subsection{Surfaces}
+
+We now consider what happens in the surface case. We described earlier how one could symplectically blow-down $(-1)$-spheres and $(-4)$-spheres, for example, in a symplectic 4-manifold $(X,\omega)$. This was achieved by a clever choice of surgery but, in general, what one is looking for is a family of symplectic forms on $X$ which degenerate along the region one wants to blow down. 
+
+\begin{rem}
+This is opposite to the process by which we constructed the form on the blow-up, starting with a form which was degenerate along the exceptional set and then perturbing it to make it symplectic. 
+\end{rem}
+
+Even if we can't do this though, we can hope to reduce our situation to algebraic geometry and use the blow-down there. If we are in such a situation, the reverse transition would allow us to blow-down 'exceptional' symplectic surfaces and replace them with configurations of Lagrangian $S^2$s, which is the sort of thing one would like to do in a symplectic minimal model programme. 
+
+Using this, one can probe the distinction between symplectic and K{\"a}hler general type for some complex surface $Y$. On the K{\"a}hler side, if $Y$ contains a  holomorphic $(-2)$-sphere $C$, $c_1(Y).C=0$ by adjunction and $c_1(Y)$ cannot contain K{\"a}hler forms. However, symplectically we're in just the situation described above and so we're in luck.
+
+\begin{lem}
+A complex surface $Y$ of general type always has symplectic general type
+\label{Surf}
+\end{lem}
+
+\begin{proof}
+We are in such an algebraic situation since for $r \geq 5$, the multicanonical linear system $|rK_Y|: Y \rightarrow \mathbb{P}^n$ is an embedding away from any holomorphic $(-2)$-spheres (not necessarily disjoint) which it contracts to Du Val singularities on a projective surface $\bar{X}$.
+
+But we can now symplectically smooth this by the inverse process to degenerating the Lagrangians described earlier. 
+Concretely, arrange for the standard local symplectic form near the nodes through an isotopy (supported near the nodes) from the natural Fubini-Study form on $\bar{X}$. Let $\omega_Y$ be the pull back of the new form to $Y$ (divided by $r$), which is degenerate precisely along the $(-2)$-spheres. 
+
+So a neighbourhood of a node $p \in \bar{X}$ is given by $(\{f(x_1,x_2,x_3)=0\},\omega_{st})$ for an appropriate polynomial $f$. Under the standard smoothing, the contact boundary of the neighbourhood remains the same (by Gray's stability theorem) and the general smooth fibre has $\omega$-convex boundary. Since away from the tree of $S^2$s, the general fibre and the nodal fibre are symplectomorphic (via symplectic parallel transport), the latter also has $\omega$-convex boundary.
+
+So symplectically we may form the smoothing $(X,\omega_X)$ after cutting out our neighbourhood of the singularity. Note that smoothly we haven't done anything (i.e $X$ is diffeomorphic to $Y$) since the existence of simultaneous resolutions (see \ref{Sim}) means Du Val singularities have diffeomorphic smoothings and resolutions. However the spheres are now Lagrangian with respect to $\omega_X$, and each tree has a neighbourhood $U$ symplectomorphic to our plumbing description earlier.
+
+Thus, away from neighbourhoods $U$, $\omega_X$ pulls back to give $\omega_Y$ and in $U$, the class of the form also hasn't changed since $\omega_{can}=d\lambda_{can}$ (as a form on $\coprod T^*S^2$) is exact there. So $-c_1(Y)=[\omega_Y]=[\omega_X]$ is represented by a symplectic form as we wanted.
+
+\end{proof}
+
+The above proof relied on the fact that the smoothing and resolution of a Du Val singularity were smoothly the same. But when we move outside this class of surface singularities (embedded in $\mathbb{C}^3$), this fails and so we see some interesting topological changes. 
+
+For example, take instead a surface OTP which has a resolution with exceptional set a degree 3 (so genus 1) curve in $\mathbb{P}^2$ with $c_1(N_{E\backslash \hat{X}})=-3$ by adjunction. As the Milnor number is 8, the smoothing has homotopy type $\vee_{i=1}^8 S^2$. So we can consider the surgery which replaces a neighbourhood of a symplectic torus of square -3 in a symplectic manifold $Y$ (suppose, for simplicity, that this torus is obtained as the proper transform after 3 blow-ups of a torus $T$ of square 0) with a neighbourhood of these vanishing cycles (say $X$). Then $X$ is diffeomorphic to $Y \#_{T=F} E(1)$ where $F \subset E(1)$ is a general fibre. Thus the fibre connect sum with $E(1)$, which we used earlier, can also be realised as one of the transitions we have been discussing.
+
+
+\begin{thebibliography}{9}
+
+\bibitem{Ca} M. Caibar, \textit{Minimal Models of Canonical Singularities and their Cohomology}, PhD Thesis, 1999
+
+\bibitem{CS} A. Corti, I. Smith, \textit{Conifold Transitions and Mori Theory}, math.SG/0501043, 2005
+
+\bibitem{Da} R. Davies, \textit{Classification and Properties of Hyperconifold Singularities and Transitions}, math.AG/1309.6778, 2013
+
+\bibitem{Di} A. Dimca, \textit{Singularities and topology of hypersurfaces}, Springer, New York, 1992
+
+\bibitem{Pa} J. Fine, D. Panov, \textit{Symplectic Calabi-Yau manifolds, minimal surfaces and the hyperbolic geometry of the conifold}, math.SG/0802.3648, 2008
+
+\bibitem{Fl} H. Flenner, \textit{Divisorenklassengruppen quasihomogener Singularitaten}, J. Reine Angew. Math. 328, 1981
+
+\bibitem{Fr} R. Friedman, \textit{Simultaneous Resolution of Threefold Double Points}, Math. Ann. 274, 671-689, 1986
+
+\bibitem{GMS} B. Greene, D. Morrison, A. Strominger, \textit{Black Hole Condensation and the Unification of String Vacua}, hep-th/9504145, 1995
+
+\bibitem{Gro} M. Gross, \textit{Blabber about black holes}, Unpublished note, 1996
+
+\bibitem{LT} P. Lu, G. Tian, \textit{The complex structure on a connected sum of $S^3 \times S^3$ with trivial canonical bundle}, Math. Ann. 298, 761-764, 1994
+
+\bibitem{MS} D. McDuff, D. Salamon, \textit{Introduction to Symplectic Topology}, 2nd Ed., OUP, 1998
+
+\bibitem{Mi} J. Milnor, \textit{Singular Points of Complex Hypersurfaces}, Princeton University Press, 1968
+
+\bibitem{Mo} D. Morrison, \textit{Through the Looking Glass}, alg-geom/9705028, 1997
+
+\bibitem{ST} I. Smith, R. Thomas, \textit{Symplectic surgeries from singularities}, math.SG/0212213, 2003
+
+\bibitem{STY} I. Smith, R. Thomas, S.T. Yau, \textit{Symplectic Conifold Transitions}, math.SG/0209319, 2002
+
+\bibitem{Th} R. Thomas, \textit{An exercise in mirror symmetry}, Proceedings of the International Congress of Mathematicians, Hyperabad, India, 2010
+
+\bibitem{W} C. Wall, \textit{Classification Problems in Differential Topology V - On Certain 6-Manifolds}, Invent. Math. 1, 355-374, 1966
+
+\end{thebibliography}
+\end{document}
